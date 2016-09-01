@@ -437,24 +437,13 @@ public class LoginActivity extends AppCompatActivity implements OnConnectionFail
                 fragmentManager.beginTransaction().add(R.id.fragment_container, new Help(), HELP_TEXT).commit();
                 break;
             case ACHIEVEMENTS_TEXT:
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                builder.setMessage("Achievements feature coming soon!.");
-                builder.setCancelable(false);
-                builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
-//                if (google_api_client != null) {
-//                    google_api_client.connect();
-//                    if (google_api_client.isConnected()) {
-//                        startActivityForResult(Games.Achievements.getAchievementsIntent(google_api_client), 16);
-//                    } else Toast.makeText(this, "ERROR! Not Connected!", Toast.LENGTH_SHORT).show();
-//                } else Toast.makeText(this, "No Google API client found!\n" +
-//                        "Is Google Play Games missing?", Toast.LENGTH_SHORT).show();
+                if (google_api_client != null) {
+                    google_api_client.connect();
+                    if (google_api_client.isConnected()) {
+                        startActivityForResult(Games.Achievements.getAchievementsIntent(google_api_client), 16);
+                    } else Toast.makeText(this, "ERROR! Not Connected!", Toast.LENGTH_SHORT).show();
+                } else Toast.makeText(this, "No Google API client found!\n" +
+                        "Is Google Play Games missing?", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -542,7 +531,6 @@ public class LoginActivity extends AppCompatActivity implements OnConnectionFail
     /*
       Sign-out from Google+ account
      */
-
     private void gPlusSignOut() {
         if (google_api_client.isConnected()) {
             Games.signOut(google_api_client);
@@ -561,30 +549,7 @@ public class LoginActivity extends AppCompatActivity implements OnConnectionFail
     }
 
     /*
-     Revoking access from Google+ account
-     */
-//    private void gPlusRevokeAccess() {
-//        if (google_api_client.isConnected()) {
-//            Plus.AccountApi.clearDefaultAccount(google_api_client);
-//            Plus.AccountApi.revokeAccessAndDisconnect(google_api_client)
-//                    .setResultCallback(new ResultCallback<Status>() {
-//                        @Override
-//                        public void onResult(@NonNull Status arg0) {
-//                            Log.d("MainActivity", "User access revoked!");
-//                            buildNewGoogleApiClient();
-//                            google_api_client.connect();
-//                            changeUI(false);
-//                        }
-//
-//                    });
-//            dp = null;
-//        }
-//        else
-//            Toast.makeText(LoginActivity.this, "Make sure the device is connected to internet", Toast.LENGTH_SHORT).show();
-//    }
-
-    /*
-     get user's information name and profile pic
+     get user's name and profile pic
      */
     @SuppressWarnings("deprecation")
     private void getProfileInfo() {

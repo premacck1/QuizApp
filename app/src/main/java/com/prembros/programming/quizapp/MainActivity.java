@@ -58,10 +58,6 @@ public class MainActivity extends LoginActivity
         RateThisApp.onStart(this);
         // If the criteria is satisfied, "Rate this app" dialog will be shown
         RateThisApp.showRateDialogIfNeeded(this);
-        /*
-        * TODO: Stop showing 'rate this' dialog
-        */
-        RateThisApp.stopRateDialog(this);
     }
 
     @SuppressWarnings("ConstantConditions")

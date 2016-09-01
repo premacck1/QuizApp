@@ -346,33 +346,6 @@ public class Bookmarks extends AppCompatActivity {
             listView.setAdapter(listAdapter);
         }
 
-//        private void prepareListData() {
-//            listDataHeader = new ArrayList<>();
-//            listDataChild = new HashMap<>();
-//
-//            dbHandler = new DatabaseHolder(getContext());
-//            dbHandler.open();
-//            Cursor bookmarkedQuestions = dbHandler.returnBookmarkedQuestion(getField());
-//            bookmarkedQuestions.moveToFirst();
-//
-//            int location = 0;
-//
-////            POPULATING THE expandableListView
-//            while (!bookmarkedQuestions.isAfterLast()) {
-//                // Adding header data
-//                listDataHeader.add((location +1 ) + ": " + bookmarkedQuestions.getString(bookmarkedQuestions.getColumnIndex("question")));
-//
-//                // Adding child data
-//                List<String> q1 = new ArrayList<>();
-//                q1.add("Answer: " + bookmarkedQuestions.getString(bookmarkedQuestions.getColumnIndex("answer")));
-//
-//                listDataChild.put(listDataHeader.get(location), q1); // Header, Child data
-//                location++;
-//                bookmarkedQuestions.moveToNext();
-//            }
-//            dbHandler.close();
-//        }
-
         public static String getField(int n) {
             String field = null;
             switch (n) {

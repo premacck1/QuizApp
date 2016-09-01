@@ -32,6 +32,8 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.games.achievement.Achievements;
 import com.kobakei.ratethisapp.RateThisApp;
 
 import java.io.File;
@@ -70,19 +72,45 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
         if (!pieError) {
             setContentView(R.layout.activity_results);
 
-        /*TODO:Remove comments to submit score Only before the final publish,
-         TODO:because the leaderboards cannot be reset once published and the scores in beta testing don't matter!
-        /*
-        submit score to leaderboard
-        */
+            /*
+            * Submit score to leaderboard
+            */
+            if (isStoreVersion(getApplicationContext())) {
+                if (google_api_client != null && google_api_client.isConnected() && Questions.SCORE > 0)
+                    Games.Leaderboards.submitScore(google_api_client,
+                            getLeaderboardID(Questions.selections[0], Questions.selections[1]), Questions.SCORE);
+                else Toast.makeText(Results.this, "Can't upload score", Toast.LENGTH_SHORT).show();
+            } else Toast.makeText(Results.this,
+                    "Download this app from Play Store to Participate in Leaderboards", Toast.LENGTH_LONG).show();
 
-//            if (isStoreVersion(getApplicationContext())) {
-//                if (google_api_client != null && google_api_client.isConnected() && Questions.SCORE > 0)
-//                    Games.Leaderboards.submitScore(google_api_client,
-//                            getLeaderboardID(Questions.selections[0], Questions.selections[1]), Questions.SCORE);
-//                else Toast.makeText(Results.this, "Can't upload score", Toast.LENGTH_SHORT).show();
-//            } else Toast.makeText(Results.this,
-//                    "Download this app from Play Store to Participate in Leaderboards", Toast.LENGTH_LONG).show();
+            /*
+            * Unlock leaderboard if any
+            */
+            Achievements achievements = Games.Achievements;
+            if (correctAnswers == questionCount){
+                achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQAg");           //achievement_beginners_luck
+                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQAw", 1);     //achievement_streak_of_5
+                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBA", 1);     //achievement_streak_of_15
+                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBQ", 1);     //achievement_streak_of_30
+                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQIg", 1);     //achievement_streak_of_50
+                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQIw", 1);     //achievement_streak_of_100
+                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQJA", 1);     //achievement_streak_if_150
+                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQJQ", 1);     //achievement_streak_of_200
+            }
+            else if (incorrectAnswers == questionCount){
+                achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQBg");           //achievement_bummer_star
+                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBw", 1);     //achievement_bummer_king
+                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQCA", 1);     //achievement_emperor_of_bummerville
+            }
+            else if (correctAnswers == (questionCount/2)){
+                achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQJg");           //achievement_positive_halfsies
+            }
+            else if (incorrectAnswers == (questionCount/2)){
+                achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQJw");           //achievement_negative_halfsies
+            }
+            else if (skippedAnswers == questionCount){
+                achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQIQ");           //achievement_skippy
+            }
 
             rootView = (RelativeLayout) findViewById(R.id.result_page);
 

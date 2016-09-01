@@ -101,7 +101,7 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isFragmentActive = true;
-        rootView = inflater.inflate(R.layout.activity_questions, container, false);
+        rootView = inflater.inflate(R.layout.fragment_questions, container, false);
 //        GET THE SELECTED FIELD AND DIFFICULTY.
         Bundle b = this.getArguments();
         selections = new String[]{String.valueOf(b.get(FIELD_ARG)), String.valueOf(b.get(DIFFICULTY_ARG))};
@@ -109,7 +109,7 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
 //        GET THE QUESTIONS CORRESPONDING TO THE SELECTED FIELD AND DIFFICULTY
         questionList = b.getParcelableArrayList("Question");
         if (questionList != null) {
-            rootView = inflater.inflate(R.layout.activity_questions, container, false);
+            rootView = inflater.inflate(R.layout.fragment_questions, container, false);
 
 //        INSTANTIATE ALL THE VIEWS IN THIS ACTIVITY.
             instantiate();

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QuizApp</string>
+    <string name="app_name">QuizApp (FREE)</string>
     <string name="app_fields">iOS | Java | HTML | JavaScript</string>
 
     <string name="app_id">59138897047</string>
@@ -8,9 +8,16 @@
     <string name="achievement_streak_of_5">CgkIl-nPp9wBEAIQAw</string>
     <string name="achievement_streak_of_15">CgkIl-nPp9wBEAIQBA</string>
     <string name="achievement_streak_of_30">CgkIl-nPp9wBEAIQBQ</string>
+    <string name="achievement_streak_of_50">CgkIl-nPp9wBEAIQIg</string>
+    <string name="achievement_streak_of_100">CgkIl-nPp9wBEAIQIw</string>
+    <string name="achievement_streak_if_150">CgkIl-nPp9wBEAIQJA</string>
+    <string name="achievement_streak_of_200">CgkIl-nPp9wBEAIQJQ</string>
+    <string name="achievement_positive_halfsies">CgkIl-nPp9wBEAIQJg</string>
+    <string name="achievement_negative_halfsies">CgkIl-nPp9wBEAIQJw</string>
     <string name="achievement_bummer_star">CgkIl-nPp9wBEAIQBg</string>
     <string name="achievement_bummer_king">CgkIl-nPp9wBEAIQBw</string>
     <string name="achievement_emperor_of_bummerville">CgkIl-nPp9wBEAIQCA</string>
+    <string name="achievement_skippy">CgkIl-nPp9wBEAIQIQ</string>
     <string name="leaderboard_rookie__ios">CgkIl-nPp9wBEAIQHA</string>
     <string name="leaderboard_rookie__java">CgkIl-nPp9wBEAIQHQ</string>
     <string name="leaderboard_rookie__html">CgkIl-nPp9wBEAIQHg</string>
@@ -43,72 +50,7 @@
     <string name="difficulty_pro">Pro</string>
     <string name="difficulty_hitman">Hitman</string>
 
-    <string name="google_client_id1234">148149429934-otg1p36p85f41bp9q10h2a9d1p7aceh2.apps.googleusercontent.com</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_questions">Quiz</string>
-    <string name="title_activity_settings">Settings</string>
-
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-        <item>Ever</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-        <item>-2</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_bookmarks">Bookmarks</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">section: %1$d</string>
@@ -220,21 +162,20 @@
     <string name="int_add_full2">ca-app-pub-3940256099942544/6300978111</string><!--ca-app-pub-3940256099942544/6300978111-->
     <string name="int_add_full_bookmark">ca-app-pub-3940256099942544/6300978111</string><!--ca-app-pub-3940256099942544/6300978111-->
 
-
    <!-- <string name="int_add_full">ca-app-pub-0057541165660355/5470334687</string>&lt;!&ndash;ca-app-pub-3940256099942544/6300978111&ndash;&gt;
     <string name="int_add_full1">ca-app-pub-0057541165660355/4940454280</string>&lt;!&ndash;ca-app-pub-3940256099942544/6300978111&ndash;&gt;
     <string name="int_add_full2">ca-app-pub-0057541165660355/6417187483</string>&lt;!&ndash;ca-app-pub-3940256099942544/6300978111&ndash;&gt;
     <string name="int_add_full_bookmark">ca-app-pub-0057541165660355/5152277085</string>&lt;!&ndash;ca-app-pub-3940256099942544/6300978111&ndash;&gt;
 -->
     <string name="times_up">Times up!</string><!--ca-app-pub-0057541165660355/5470334687-->
-    <string name="get_pro_content">Pro version comes with the following features:" +
-                        "\n\n*No Ads" +
-                        "\n*New Questions" +
-                        "\n*Personal score history" +
-                        "\n\n* you would be helping the developers buy a cup of coffee!
+    <string name="get_pro_content">Pro version comes with the following features:
+                        \n\n*No Ads
+                        \n*New Questions
+                        \n*Personal score history
+                        \n\n*Also, the developers really appreciate your contribution!
     </string>
-    <string name="get_pro_redirect">You will now be taken to our Play Store page." +
-                                "\nInstall "QuizApp Pro" from there.
+    <string name="get_pro_redirect">You will now be taken to our Play Store page.
+                                \nInstall "QuizApp Pro" from there.
     </string>
     <string name="rate_this_app">Rate this app</string>
     <string name="tutorial">Tutorial</string>
