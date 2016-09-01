@@ -237,5 +237,6 @@
                                 "\nInstall "QuizApp Pro" from there.
     </string>
     <string name="rate_this_app">Rate this app</string>
+    <string name="tutorial">Tutorial</string>
 
 </resources>

@@ -111,19 +111,6 @@ public class LoginActivity extends AppCompatActivity implements OnConnectionFail
                         }
                     }
                 }, 3000);
-
-//            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-//            builder.setTitle("No Internet?");
-//            builder.setMessage("Sorry, but we couldn't find any internet connections.\nFirst connect to a network then come here again.");
-//            builder.setCancelable(false);
-//            builder.setPositiveButton("Back", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    LoginActivity.this.finish();
-//                }
-//            });
-//            AlertDialog alert = builder.create();
-//            alert.show();
             }
         }
     }
@@ -450,13 +437,24 @@ public class LoginActivity extends AppCompatActivity implements OnConnectionFail
                 fragmentManager.beginTransaction().add(R.id.fragment_container, new Help(), HELP_TEXT).commit();
                 break;
             case ACHIEVEMENTS_TEXT:
-                if (google_api_client != null) {
-                    google_api_client.connect();
-                    if (google_api_client.isConnected()) {
-                        startActivityForResult(Games.Achievements.getAchievementsIntent(google_api_client), 16);
-                    } else Toast.makeText(this, "ERROR! Not Connected!", Toast.LENGTH_SHORT).show();
-                } else Toast.makeText(this, "No Google API client found!\n" +
-                        "Is Google Play Games missing?", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                builder.setMessage("Achievements feature coming soon!.");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+//                if (google_api_client != null) {
+//                    google_api_client.connect();
+//                    if (google_api_client.isConnected()) {
+//                        startActivityForResult(Games.Achievements.getAchievementsIntent(google_api_client), 16);
+//                    } else Toast.makeText(this, "ERROR! Not Connected!", Toast.LENGTH_SHORT).show();
+//                } else Toast.makeText(this, "No Google API client found!\n" +
+//                        "Is Google Play Games missing?", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

@@ -8,7 +8,7 @@ android {
         applicationId "com.prembros.programming.quizapp"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 8
+        versionCode 9
         versionName "1.11"
         multiDexEnabled true
     }

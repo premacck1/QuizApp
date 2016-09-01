@@ -170,10 +170,10 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
 //        SET UP ACTION BAR
             android.support.v7.app.ActionBar ab = ((AppCompatActivity)getActivity()).getSupportActionBar();
             if (ab != null) {
-                ab.setSubtitle(selections[0] + " : " + selections[1]);
                 ab.setDisplayShowHomeEnabled(true);
                 ab.setDisplayHomeAsUpEnabled(true);
-                ab.setTitle(R.string.quiz);
+                ab.setTitle(selections[0]);
+                ab.setSubtitle(selections[1]);
             }
 
             answer = questionBean.getAnswer();

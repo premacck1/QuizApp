@@ -383,8 +383,10 @@ public class MainActivity extends LoginActivity
                     builder.show();
                 }
                 break;
-            case R.id.action_account:
-                startActivity(new Intent(this, LoginActivity.class));
+            case R.id.action_tutorial:
+                //  Launch app intro
+                startActivity(new Intent(this, FirstIntro.class));
+                this.finish();
                 break;
             case R.id.action_get_pro:
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
