@@ -48,7 +48,8 @@
         <activity
             android:name="com.prembros.programming.quizapp.MainActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/MainActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />]

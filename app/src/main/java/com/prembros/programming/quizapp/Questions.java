@@ -2,6 +2,7 @@ package com.prembros.programming.quizapp;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -71,6 +72,16 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
     private int totalTime;
 
     public Questions() {
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser){
+            if (getActivity() != null){
+                getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+            }
+        }
     }
 
     @Override

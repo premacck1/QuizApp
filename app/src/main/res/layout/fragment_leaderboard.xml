@@ -35,7 +35,7 @@
             android:numColumns="2"
             android:horizontalSpacing="15dp"
             android:verticalSpacing="15dp"
-            android:listSelector="#0000"
+            android:listSelector="@android:color/transparent"
             android:id="@+id/la_ListView"
             android:scrollbars="none"
             android:layout_gravity="center" />

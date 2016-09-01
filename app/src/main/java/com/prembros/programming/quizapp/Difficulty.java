@@ -25,19 +25,6 @@ public class Difficulty extends Fragment {
     private OnFragmentInteractionListener mListener;
     private boolean isFragmentActive = false;
 
-/*    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            Bundle args;
-            args = this.getArguments();
-            fieldPosition = (int) args.get(ARG_POSITION);
-            if (fieldPosition == 123){
-                mListener.onFragmentInteraction(123, 123);
-            }
-        }
-    }*/
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

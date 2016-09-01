@@ -54,7 +54,6 @@ public class MainActivity extends LoginActivity
     @Override
     protected void onStart() {
         super.onStart();
-        Context context = this;
         // Monitor launch times and interval from installation
         RateThisApp.onStart(this);
         // If the criteria is satisfied, "Rate this app" dialog will be shown
@@ -73,9 +72,6 @@ public class MainActivity extends LoginActivity
         if (savedInstanceState != null) {
             return;
         }
-
-        progressDialogMainActivity = new ProgressDialog(this);
-        progressDialogMainActivity.setMessage("Loading...");
 
         if (progress_dialog!=null) progress_dialog.dismiss();
 
@@ -468,6 +464,9 @@ public class MainActivity extends LoginActivity
             Bundle args = new Bundle();
             QUESTION = doInBackground(JSONString, selection, difficulty);
             if (QUESTION != null) {
+                progressDialogMainActivity = new ProgressDialog(MainActivity.this);
+                progressDialogMainActivity.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressDialogMainActivity.setMessage("Loading Questions...");
                 progressDialogMainActivity.show();
                 args.putString(Questions.FIELD_ARG, selection);
                 args.putString(Questions.DIFFICULTY_ARG, difficulty);
@@ -502,7 +501,8 @@ public class MainActivity extends LoginActivity
                 onBackPressed();
                 break;
             case "dismiss":
-                progressDialogMainActivity.dismiss();
+                if (progressDialogMainActivity != null)
+                    progressDialogMainActivity.dismiss();
                 break;
             case "launchResults":
                 Questions.wannaGoToHome = true;
