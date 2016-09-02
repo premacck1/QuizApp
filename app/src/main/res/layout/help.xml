@@ -13,17 +13,18 @@
         android:text="@string/help_header"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:textColor="#FFFFFF" />
+        android:textColor="@color/default_color" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_gravity="center_horizontal"
-        android:background="#FFFFFF" />
+        android:background="@color/default_color" />
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryLight">
 
         <LinearLayout
             android:orientation="vertical"
@@ -39,16 +40,14 @@
                 android:textSize="20sp"
                 android:layout_marginTop="10dp"
                 android:text="@string/help_choosing_a_difficulty_level"
-                android:textColor="#FFFFFF"
-                android:alpha="255" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:layout_width="225dp"
                 android:layout_height="1dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_gravity="center_horizontal"
-                android:background="#FFF"
-                android:alpha="255" />
+                android:background="@color/black" />
 
             <com.prembros.programming.quizapp.CustomTextViewLight
                 android:layout_width="match_parent"
@@ -56,9 +55,8 @@
                 android:gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:text="@string/help_choosing_a_difficulty_level_content"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:alpha="255" />
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <com.prembros.programming.quizapp.CustomTextViewSemiLight
                 android:layout_width="match_parent"
@@ -67,16 +65,14 @@
                 android:textSize="20sp"
                 android:layout_marginTop="40dp"
                 android:text="@string/help_during_the_quiz"
-                android:textColor="#FFFFFF"
-                android:alpha="255" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:layout_width="135dp"
                 android:layout_height="1dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_gravity="center_horizontal"
-                android:background="#FFF"
-                android:alpha="255" />
+                android:background="@color/black" />
 
             <com.prembros.programming.quizapp.CustomTextViewLight
                 android:layout_width="match_parent"
@@ -84,9 +80,8 @@
                 android:gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:text="@string/help_during_the_quiz_content"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:alpha="255" />
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <com.prembros.programming.quizapp.CustomTextViewSemiLight
                 android:layout_width="match_parent"
@@ -95,7 +90,7 @@
                 android:textSize="20sp"
                 android:layout_marginTop="40dp"
                 android:text="@string/help_bookmarks"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/black"
                 android:alpha="255" />
 
             <TextView
@@ -103,8 +98,7 @@
                 android:layout_height="1dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_gravity="center_horizontal"
-                android:background="#FFF"
-                android:alpha="255" />
+                android:background="@color/black" />
 
             <com.prembros.programming.quizapp.CustomTextViewLight
                 android:layout_width="match_parent"
@@ -112,9 +106,8 @@
                 android:gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:text="@string/help_bookmarks_content"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:alpha="255" />
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <com.prembros.programming.quizapp.CustomTextViewSemiLight
                 android:layout_width="match_parent"
@@ -123,16 +116,14 @@
                 android:textSize="20sp"
                 android:layout_marginTop="40dp"
                 android:text="@string/help_want_more_features"
-                android:textColor="#FFFFFF"
-                android:alpha="255" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:layout_width="280dp"
                 android:layout_height="1dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_gravity="center_horizontal"
-                android:background="#FFF"
-                android:alpha="255" />
+                android:background="@color/black" />
 
             <com.prembros.programming.quizapp.CustomTextViewLight
                 android:layout_width="match_parent"
@@ -140,9 +131,8 @@
                 android:gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:text="@string/help_want_more_features_content"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:alpha="255" />
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
         </LinearLayout>
     </ScrollView>

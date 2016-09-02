@@ -70,10 +70,10 @@
     <com.prembros.programming.quizapp.CustomTextViewBlack
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
+        android:text="@string/app_name_2_line"
         android:id="@+id/app_name_bottom"
         android:layout_gravity="bottom"
-        android:gravity="center_horizontal"
+        android:gravity="start"
         android:textSize="20sp"
         android:textColor="#f1f1f1"
         android:padding="10dp"
