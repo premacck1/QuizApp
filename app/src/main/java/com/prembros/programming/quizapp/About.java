@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 /*
 * Created by Prem $ on 7/22/2016.
@@ -45,7 +46,12 @@ public class About extends Fragment {
         PremBrosLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=Prem+Bros")));
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=Prem+Bros")));
+                } catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "No app found for this action!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
