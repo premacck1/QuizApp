@@ -103,7 +103,8 @@
     <string name="help_want_more_features">Want no ads and more features?</string>
     <string name="help_want_more_features_content">
         * Ads can be disabled by purchasing the pro version \nwithout the \'FREE\' suffix.(Coming Soon!)
-        \n\n* You can purchase the ad-free version by clicking on \'Get Pro Version\' in Options.</string>
+        \n\n* You can purchase the ad-free version From the Play Store.
+        \n(or click below)</string>
 
 <!--RATING-->
     <string name="rate_us">Rate this app?</string>

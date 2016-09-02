@@ -165,10 +165,8 @@
                 android:textSize="40sp"
                 android:textColor="@color/colorLink"
                 android:text="@string/prembros"
-                android:shadowColor="@color/black_overlay"
-                android:shadowDx="5"
-                android:shadowDy="5"
-                android:shadowRadius="10"
+                android:shadowColor="@color/black"
+                android:shadowRadius="20"
                 />
 
         </LinearLayout>
