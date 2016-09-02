@@ -84,7 +84,7 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
                     "Download this app from Play Store to Participate in Leaderboards", Toast.LENGTH_LONG).show();
 
             /*
-            * Unlock leaderboard if any
+            * Unlock achievements if any
             */
             Achievements achievements = Games.Achievements;
             if (correctAnswers == questionCount){
