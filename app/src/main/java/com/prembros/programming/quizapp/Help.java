@@ -30,7 +30,7 @@ public class Help extends Fragment {
             public void onClick(View view) {
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=Prem+Bros")));
-                } catch (Exception e){
+                } catch (android.content.ActivityNotFoundException e){
                     e.printStackTrace();
                     Toast.makeText(getContext(), "No app found for this action!", Toast.LENGTH_SHORT).show();
                 }
