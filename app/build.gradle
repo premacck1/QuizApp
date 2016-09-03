@@ -43,8 +43,4 @@ dependencies {
     compile 'com.github.paolorotolo:appintro:4.0.0'
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
 }
-
-
-
-
 apply plugin: 'com.google.gms.google-services'
