@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,13 +13,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.v4.app.FragmentTransaction;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -32,87 +38,62 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.google.android.gms.games.Games;
-import com.google.android.gms.games.achievement.Achievements;
-import com.kobakei.ratethisapp.RateThisApp;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Results extends LoginActivity implements OnChartValueSelectedListener,
-        ResultsInDetail.OnFragmentInteractionListener {
+public class Results extends Fragment implements OnChartValueSelectedListener {
 
     private PieChart mChart;
-    private boolean doubleBackToExitPressedOnce = false;
     private boolean pieError = false;
     private DatabaseHolder dbHandler;
-    RelativeLayout rootView;
+    private OnFragmentInteractionListenerInResults mListener;
+    private RelativeLayout baseRelativeLayout;
+    private ActionBar ab;
+    public static boolean isFragmentActive = false;
+    public static ResultsInDetail resultsInDetail;
     int correctAnswers = Questions.CORRECT_ANSWERS;
     int incorrectAnswers = Questions.INCORRECT_ANSWERS;
     int questionCount = Questions.QUESTION_COUNT;
-    int skippedAnswers = (questionCount - (correctAnswers + incorrectAnswers));
+    int skippedAnswers = Questions.SKIPPED_ANSWERS;
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public void onAttach(Context context) {
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        super.onAttach(context);
         if (correctAnswers < 0 || incorrectAnswers < 0 || skippedAnswers < 0 || questionCount == 0) {
             pieError = true;
             pieDisplayError(correctAnswers, incorrectAnswers, skippedAnswers, questionCount);
         }
+        setHasOptionsMenu(true);
+        if (context instanceof OnFragmentInteractionListenerInResults) {
+            mListener = (OnFragmentInteractionListenerInResults) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(null);
-        if (progress_dialog!=null) progress_dialog.dismiss();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        isFragmentActive = true;
         if (!pieError) {
-            setContentView(R.layout.activity_results);
+            View rootView = inflater.inflate(R.layout.fragment_results, container, false);
 
-            /*
-            * Submit score to leaderboard
-            */
-            if (isStoreVersion(getApplicationContext())) {
-                if (google_api_client != null && google_api_client.isConnected() && Questions.SCORE > 0)
-                    Games.Leaderboards.submitScore(google_api_client,
-                            getLeaderboardID(Questions.selections[0], Questions.selections[1]), Questions.SCORE);
-                else Toast.makeText(Results.this, "Can't upload score", Toast.LENGTH_SHORT).show();
-            } else Toast.makeText(Results.this,
-                    "Download this app from Play Store to Participate in Leaderboards", Toast.LENGTH_LONG).show();
+            mListener.onFragmentInteractionInResults("submitScore");
 
-            /*
-            * Unlock achievements if any
-            */
-            Achievements achievements = Games.Achievements;
-            if (correctAnswers == questionCount){
-                achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQAg");           //achievement_beginners_luck
-                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQAw", 1);     //achievement_streak_of_5
-                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBA", 1);     //achievement_streak_of_15
-                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBQ", 1);     //achievement_streak_of_30
-                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQIg", 1);     //achievement_streak_of_50
-                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQIw", 1);     //achievement_streak_of_100
-                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQJA", 1);     //achievement_streak_if_150
-                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQJQ", 1);     //achievement_streak_of_200
-            }
-            else if (incorrectAnswers == questionCount){
-                achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQBg");           //achievement_bummer_star
-                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBw", 1);     //achievement_bummer_king
-                achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQCA", 1);     //achievement_emperor_of_bummerville
-            }
-            else if (correctAnswers == (questionCount/2)){
-                achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQJg");           //achievement_positive_halfsies
-            }
-            else if (incorrectAnswers == (questionCount/2)){
-                achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQJw");           //achievement_negative_halfsies
-            }
-            else if (skippedAnswers == questionCount){
-                achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQIQ");           //achievement_skippy
-            }
+            mListener.onFragmentInteractionInResults("unlockAchievements");
 
-            rootView = (RelativeLayout) findViewById(R.id.result_page);
+            baseRelativeLayout = (RelativeLayout) rootView.findViewById(R.id.result_page);
 
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -121,70 +102,75 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
                     if (Questions.selections != null) {
                         fieldDisplay = Questions.selections[1] + " : " + Questions.selections[0];
                     }
-                    CustomTextViewSemiLight fieldText = (CustomTextViewSemiLight) rootView.findViewById(R.id.field_text);
-                    CustomTextViewLight scorePoints = (CustomTextViewLight) rootView.findViewById(R.id.score_points);
+                    CustomTextViewSemiLight fieldText = (CustomTextViewSemiLight) baseRelativeLayout.findViewById(R.id.field_text);
+                    CustomTextViewLight scorePoints = (CustomTextViewLight) baseRelativeLayout.findViewById(R.id.score_points);
                     String scorePointText = "Score: " + Questions.SCORE;
                     if (correctAnswers == questionCount) {
+                        baseRelativeLayout.findViewById(R.id.app_name_bottom).setVisibility(View.GONE);
                         String fullScore = "Wow! you're the master of " + fieldDisplay + "!\nNow try another quiz and master that too!";
                         fieldText.setTextSize(16);
                         fieldText.setText(fullScore);
                         scorePoints.setText(scorePointText);
-                        fieldText.startAnimation(AnimationUtils.loadAnimation(Results.this, R.anim.zoom_in));
-                        scorePoints.setAnimation(AnimationUtils.loadAnimation(Results.this, android.R.anim.fade_in));
+                        fieldText.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in));
+                        scorePoints.setAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in));
                     }
                     else if (skippedAnswers == questionCount){
+                        baseRelativeLayout.findViewById(R.id.app_name_bottom).setVisibility(View.GONE);
                         String skip = "I think I should be SkipApp instead of QuizApp!";
                         fieldText.setTextSize(16);
                         fieldText.setText(skip);
                         scorePoints.setText(scorePointText);
-                        fieldText.startAnimation(AnimationUtils.loadAnimation(Results.this, R.anim.zoom_in));
-                        scorePoints.setAnimation(AnimationUtils.loadAnimation(Results.this, android.R.anim.fade_in));
+                        fieldText.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in));
+                        scorePoints.setAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in));
                     }
                     else if (incorrectAnswers == questionCount){
+                        baseRelativeLayout.findViewById(R.id.app_name_bottom).setVisibility(View.GONE);
                         String ohMyGod = "Can anyone be more bummed than you?";
                         fieldText.setTextSize(16);
                         fieldText.setText(ohMyGod);
                         scorePoints.setText(scorePointText);
-                        fieldText.startAnimation(AnimationUtils.loadAnimation(Results.this, R.anim.zoom_in));
-                        scorePoints.setAnimation(AnimationUtils.loadAnimation(Results.this, android.R.anim.fade_in));
+                        fieldText.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in));
+                        scorePoints.setAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in));
                     }
                     else {
-                        CustomTextViewSemiLight scoreText = (CustomTextViewSemiLight) rootView.findViewById(R.id.score_marks);
+                        CustomTextViewSemiLight scoreText = (CustomTextViewSemiLight) baseRelativeLayout.findViewById(R.id.score_marks);
                         fieldText.setText(fieldDisplay);
                         String scoreDisplay = Questions.CORRECT_ANSWERS + "/" + Questions.QUESTION_COUNT;
                         scoreText.setText(scoreDisplay);
                         scorePoints.setText(scorePointText);
-                        fieldText.startAnimation(AnimationUtils.loadAnimation(Results.this, android.R.anim.fade_in));
-                        scoreText.startAnimation(AnimationUtils.loadAnimation(Results.this, android.R.anim.fade_in));
-                        scorePoints.startAnimation(AnimationUtils.loadAnimation(Results.this, android.R.anim.fade_in));
+                        fieldText.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in));
+                        scoreText.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in));
+                        scorePoints.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in));
                     }
                 }
             }, 2000);
 
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setTitle(R.string.results);
+//        SET UP ACTION BAR
+            ab = ((AppCompatActivity)getActivity()).getSupportActionBar();
+            if (ab != null) {
+                ab.setDisplayShowHomeEnabled(false);
+                ab.setDisplayHomeAsUpEnabled(false);
+                ab.setTitle(R.string.results);
+                ab.setSubtitle("");
+            }
 
             Difficulty.BACK_FROM_RESULTS = 2;
-            dbHandler = new DatabaseHolder(getApplicationContext());
+            dbHandler = new DatabaseHolder(getContext());
 
 //        CREATE THE RESULT PIE CHART
-            mChart = (PieChart) findViewById(R.id.resultPieChart);
+            mChart = (PieChart) baseRelativeLayout.findViewById(R.id.resultPieChart);
             mChart.setVisibility(View.INVISIBLE);
             createPieChart();
             mChart.setMinimumHeight(mChart.getWidth());
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mChart.startAnimation(AnimationUtils.loadAnimation(Results.this, R.anim.fragment_anim_in));
+                    mChart.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fragment_anim_in));
                     mChart.setVisibility(View.VISIBLE);
                 }
             }, 400);
         }
-    }
-
-    public static boolean isStoreVersion(Context context) {
-        String installer = context.getPackageManager().getInstallerPackageName(context.getPackageName());
-        return !TextUtils.isEmpty(installer);
+        return baseRelativeLayout;
     }
 
     public void createPieChart(){
@@ -223,7 +209,7 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
 
         // entry label styling
         mChart.setEntryLabelColor(Color.WHITE);
-        mChart.setEntryLabelTypeface(Typeface.createFromAsset(getAssets(), "fonts/seguil.ttf"));
+        mChart.setEntryLabelTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/seguil.ttf"));
         mChart.setEntryLabelTextSize(14f);
 
 //        CODE FOR DISPLAYING CENTER TEXT(commented out):
@@ -310,7 +296,7 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
         data.setValueFormatter(new DefaultValueFormatter(0));
         data.setValueTextSize(14f);
         data.setValueTextColor(Color.WHITE);
-        data.setValueTypeface(Typeface.createFromAsset(getAssets(), "fonts/seguisl.ttf"));
+        data.setValueTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/seguisl.ttf"));
         mChart.setData(data);
 
         // undo all highlights
@@ -320,7 +306,7 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
     }
 
     public void pieDisplayError(int correctAnswers, int incorrectAnswers, int skippedAnswers, int questionCount){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("ERROR!");
         builder.setMessage("Sorry but the results couldn't be loaded. Please take the quiz again." +
                 "\nIf problem persists, contact us with these details:\n" +
@@ -334,7 +320,7 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Results.this.finish();
+                mListener.onFragmentInteractionInResults("finishResultsFragment");
             }
         });
         AlertDialog alert = builder.create();
@@ -372,7 +358,7 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
         Log.i("VAL SELECTED", "Value: " + e.getY()
                 + ", index: " + h.getX()
                 + ", DataSet index: " + h.getDataSetIndex());
-        ResultsInDetail resultsInDetail = new ResultsInDetail();
+        resultsInDetail = new ResultsInDetail();
         Bundle args = new Bundle();
         if (correctAnswers == 0) {                                                ////INCORRECT AND SKIPPED
             if (incorrectAnswers == 0){
@@ -402,18 +388,12 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
             @Override
             public void run() {
                 //noinspection ConstantConditions
-                getSupportActionBar().hide();
+                ab.hide();
                 mChart.highlightValues(null);
             }
         }, 150);
-
-        if(ResultsInDetail.isFragmentActive){
-            ResultsInDetail.isFragmentActive = false;
-            getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("resultsInDetail")).commit();
-        }
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.fragment_container, resultsInDetail, "resultsInDetail").commit();
-        // undo all highlights
+//        show Results in detail
+        mListener.onFragmentInteractionInResults("showResultsInDetail");
     }
 
     @Override
@@ -421,16 +401,16 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroyView() {
+        isFragmentActive = false;
         resetFlags();
-        super.onDestroy();
+        super.onDestroyView();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_results, menu);
-        return true;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_results, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -440,24 +420,21 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()){
             case R.id.action_account:
-                startActivity(new Intent(this, LoginActivity.class));
+                startActivity(new Intent(getContext(), LoginActivity.class));
                 break;
             case R.id.action_share:
-                Bitmap bm = getScreenshot(rootView);
+                Bitmap bm = getScreenshot(baseRelativeLayout);
                 File imageFile = store(bm, "QuizResult.jpeg");
                 shareImage(imageFile);
                 break;
-            case R.id.action_bookmark:
-                startActivity(new Intent(this, Bookmarks.class));
-                break;
             case R.id.action_get_pro:
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                 alert.setTitle(R.string.get_pro);
                 alert.setMessage(R.string.get_pro_content);
                 alert.setPositiveButton("Get Pro", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(Results.this, R.string.get_pro_redirect, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), R.string.get_pro_redirect, Toast.LENGTH_LONG).show();
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -474,24 +451,24 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
                 });
                 alert.show();
                 break;
-            case R.id.action_leaderboard:
-                getAndRemoveActiveFragment(LEADERBOARD_TEXT);
-                loadFragment(LEADERBOARD_TEXT);
-                break;
-            case R.id.action_achievements:
-                loadFragment(ACHIEVEMENTS_TEXT);
-                break;
-            case R.id.action_rate_this_app:
-                RateThisApp.showRateDialog(this);
-                break;
-            case R.id.action_about:
-                getAndRemoveActiveFragment(ABOUT_TEXT);
-                loadFragment(ABOUT_TEXT);
-                break;
-            case R.id.action_help:
-                getAndRemoveActiveFragment(HELP_TEXT);
-                loadFragment(HELP_TEXT);
-                break;
+//            case R.id.action_leaderboard:
+//                getAndRemoveActiveFragment(LEADERBOARD_TEXT);
+//                loadFragment(LEADERBOARD_TEXT);
+//                break;
+//            case R.id.action_achievements:
+//                loadFragment(ACHIEVEMENTS_TEXT);
+//                break;
+//            case R.id.action_rate_this_app:
+//                RateThisApp.showRateDialog(this);
+//                break;
+//            case R.id.action_about:
+//                getAndRemoveActiveFragment(ABOUT_TEXT);
+//                loadFragment(ABOUT_TEXT);
+//                break;
+//            case R.id.action_help:
+//                getAndRemoveActiveFragment(HELP_TEXT);
+//                loadFragment(HELP_TEXT);
+//                break;
         }
         return true;
     }
@@ -563,64 +540,11 @@ public class Results extends LoginActivity implements OnChartValueSelectedListen
         try{
             startActivity(Intent.createChooser(intent, "Share your QuizResult"));
         } catch (ActivityNotFoundException e){
-            Toast.makeText(Results.this, "No app available!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No app available!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        Difficulty.BACK_FROM_RESULTS = 2;
-        if (Help.isFragmentActive){
-            getAndRemoveActiveFragment(HELP_TEXT);
-            return;
-        }
-        if (About.isFragmentActive){
-            getAndRemoveActiveFragment(ABOUT_TEXT);
-            return;
-        }
-        if (Leaderboard.isFragmentActive){
-            getAndRemoveActiveFragment(LEADERBOARD_TEXT);
-            return;
-        }
-        int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
-
-        if(backStackCount >= 1){
-            //noinspection ConstantConditions
-            getSupportActionBar().show();
-            getSupportFragmentManager().popBackStackImmediate();
-            return;
-        }
-        if(ResultsInDetail.isFragmentActive){
-            onFragmentInteraction();
-        }
-        else {
-            //Place Ads
-
-            ResultsInDetail.isFragmentActive = false;
-            if (doubleBackToExitPressedOnce) {
-                resetFlags();
-                super.onBackPressed();
-                return;
-            }
-
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "Don't forget to share your QuizResult!\nIf you have, hit back again to goto home", Toast.LENGTH_SHORT).show();
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
-        }
-    }
-
-    @Override
-    public void onFragmentInteraction() {
-        ResultsInDetail.isFragmentActive = false;
-        ResultsInDetail.rootView.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fragment_anim_out));
-        //noinspection ConstantConditions
-        getSupportActionBar().show();
-        getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("resultsInDetail")).commit();
+    public interface OnFragmentInteractionListenerInResults {
+        void onFragmentInteractionInResults(String action);
     }
 }

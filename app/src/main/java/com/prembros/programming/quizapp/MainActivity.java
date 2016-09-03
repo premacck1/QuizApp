@@ -12,14 +12,18 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.games.Games;
+import com.google.android.gms.games.achievement.Achievements;
 import com.kobakei.ratethisapp.RateThisApp;
 
 import org.json.JSONException;
@@ -37,8 +41,13 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends LoginActivity
-        implements Field.OnFragmentInteractionListener, Difficulty.OnFragmentInteractionListener , Questions.OnFragmentInteractionListener {
+        implements Field.OnFragmentInteractionListener,
+        Difficulty.OnFragmentInteractionListener,
+        Questions.OnFragmentInteractionListener,
+        Results.OnFragmentInteractionListenerInResults,
+        ResultsInDetail.OnFragmentInteractionListener{
 
+    private FragmentManager fragmentManager = getSupportFragmentManager();
     private String JSONString = null;
     boolean doubleBackToExitPressedOnce = false;
     protected static ArrayList<QuestionBean> QUESTION = null;
@@ -79,7 +88,7 @@ public class MainActivity extends LoginActivity
 
         Field mField = new Field();
         mField.setArguments(getIntent().getExtras());
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(android.R.anim.fade_in, R.anim.slide_out_left,
                 android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         transaction.add(R.id.main_fragment_container, mField).commit();
@@ -163,7 +172,8 @@ public class MainActivity extends LoginActivity
     @Override
     protected void onResumeFragments() {
         if (Difficulty.BACK_FROM_RESULTS == 2){
-            getSupportFragmentManager().popBackStack();
+            if (!Results.isFragmentActive)
+                fragmentManager.popBackStack();
         }
         super.onResumeFragments();
     }
@@ -338,7 +348,7 @@ public class MainActivity extends LoginActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (!Questions.isFragmentActive) {
+        if (!Questions.isFragmentActive && !Results.isFragmentActive) {
             getMenuInflater().inflate(R.menu.menu_main, menu);
             return true;
         }
@@ -352,7 +362,7 @@ public class MainActivity extends LoginActivity
         // as you specify a parent activity in AndroidManifest.xml.
         switch(item.getItemId()){
             case android.R.id.home:
-                if (getSupportFragmentManager().getBackStackEntryCount() == 2){
+                if (fragmentManager.getBackStackEntryCount() == 2){
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("More or less");
                     builder.setMessage("Go back and change difficulty?");
@@ -366,7 +376,7 @@ public class MainActivity extends LoginActivity
                             dbHandler.open();
                             dbHandler.resetTables();
                             dbHandler.close();
-                            getSupportFragmentManager().popBackStackImmediate();
+                            fragmentManager.popBackStackImmediate();
                         }
                     });
                     builder.setNegativeButton("I can take it", new DialogInterface.OnClickListener() {
@@ -378,12 +388,12 @@ public class MainActivity extends LoginActivity
                     });
                     builder.show();
                 }
-                break;
+                return true;
             case R.id.action_tutorial:
                 //  Launch app intro
                 startActivity(new Intent(this, FirstIntro.class));
                 this.finish();
-                break;
+                return true;
             case R.id.action_get_pro:
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.setTitle(R.string.get_pro);
@@ -407,30 +417,31 @@ public class MainActivity extends LoginActivity
                     }
                 });
                 alert.show();
-                break;
+                return true;
             case R.id.action_leaderboard:
                 getAndRemoveActiveFragment(LEADERBOARD_TEXT);
                 loadFragment(LEADERBOARD_TEXT);
-                break;
+                return true;
             case R.id.action_achievements:
                 loadFragment(ACHIEVEMENTS_TEXT);
-                break;
+                return true;
             case R.id.action_bookmark:
                 startActivity(new Intent(this, Bookmarks.class));
-                break;
+                return true;
             case R.id.action_rate_this_app:
                 RateThisApp.showRateDialog(this);
-                break;
+                return true;
             case R.id.action_about:
                 getAndRemoveActiveFragment(ABOUT_TEXT);
                 loadFragment(ABOUT_TEXT);
-                break;
+                return true;
             case R.id.action_help:
                 getAndRemoveActiveFragment(HELP_TEXT);
                 loadFragment(HELP_TEXT);
-                break;
+                return true;
+            default:
+                return false;
         }
-        return true;
     }
 
     //    onFragmentInteraction of Field fragment
@@ -442,7 +453,7 @@ public class MainActivity extends LoginActivity
         args.putString(Difficulty.ARG_POSITION, field);
         mdifficulty.setArguments(args);
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
                 android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         transaction.replace(R.id.main_fragment_container, mdifficulty);
@@ -455,7 +466,7 @@ public class MainActivity extends LoginActivity
     @Override
     public void onFragmentInteraction(String selection, String difficulty) {
         if (Difficulty.BACK_FROM_RESULTS == 1 || Difficulty.BACK_FROM_RESULTS == 2){
-            getSupportFragmentManager().popBackStack();
+            fragmentManager.popBackStack();
         }
         else {
             Questions mQuestions = new Questions();
@@ -463,6 +474,7 @@ public class MainActivity extends LoginActivity
             QUESTION = doInBackground(JSONString, selection, difficulty);
             if (QUESTION != null) {
                 progressDialogMainActivity = new ProgressDialog(MainActivity.this);
+                progressDialogMainActivity.setIndeterminate(false);
                 progressDialogMainActivity.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 progressDialogMainActivity.setMessage("Loading Questions...");
                 progressDialogMainActivity.show();
@@ -470,7 +482,7 @@ public class MainActivity extends LoginActivity
                 args.putString(Questions.DIFFICULTY_ARG, difficulty);
                 args.putParcelableArrayList("Question", QUESTION);
                 mQuestions.setArguments(args);
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
                         android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 transaction.replace(R.id.main_fragment_container, mQuestions);
@@ -492,6 +504,7 @@ public class MainActivity extends LoginActivity
         }
     }
 
+    //        onFragmentInteraction of Question fragment
     @Override
     public void onFragmentInteraction(String action) {
         switch (action){
@@ -504,12 +517,103 @@ public class MainActivity extends LoginActivity
                 break;
             case "launchResults":
                 Questions.wannaGoToHome = true;
-                getSupportFragmentManager().popBackStackImmediate();
-                getSupportFragmentManager().popBackStackImmediate();
-                startActivity(new Intent(this, Results.class));
+                fragmentManager.popBackStackImmediate();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.fragment_anim_in, android.R.anim.slide_out_right,
+                        android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                transaction.replace(R.id.main_fragment_container, new Results());
+                transaction.addToBackStack("ResultsLaunched");
+                transaction.commit();
+                break;
             default:
                 break;
         }
+    }
+
+    public static boolean isStoreVersion(Context context) {
+        String installer = context.getPackageManager().getInstallerPackageName(context.getPackageName());
+        return !TextUtils.isEmpty(installer);
+    }
+
+    //        onFragmentInteraction of Results fragment
+    @Override
+    public void onFragmentInteractionInResults(String action) {
+        switch (action){
+            case "submitScore":
+                /*
+                * Submit score to leaderboard
+                */
+                if (isStoreVersion(this)) {
+                    if (google_api_client != null) {
+                        if (!google_api_client.isConnected()){
+                            google_api_client.connect();
+                        }
+                        if (Questions.SCORE > 0) {
+                            Games.Leaderboards.submitScore(google_api_client,
+                                    getLeaderboardID(Questions.selections[0], Questions.selections[1]), Questions.SCORE);
+                        }
+                        else Toast.makeText(this, "Score above zero to be in leaderboards", Toast.LENGTH_LONG).show();
+                    }
+//                    else Toast.makeText(this, "Play Games Error! Can't upload score", Toast.LENGTH_SHORT).show();
+                } else Toast.makeText(this,
+                        "Download this app from Play Store to Participate in Leaderboards", Toast.LENGTH_LONG).show();
+                break;
+            case "unlockAchievements":
+                /*
+                * Unlock achievements if any
+                */
+                Achievements achievements = Games.Achievements;
+                if (Questions.CORRECT_ANSWERS == Questions.QUESTION_COUNT){
+                    achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQAg");           //achievement_beginners_luck
+                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQAw", 1);     //achievement_streak_of_5
+                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBA", 1);     //achievement_streak_of_15
+                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBQ", 1);     //achievement_streak_of_30
+                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQIg", 1);     //achievement_streak_of_50
+                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQIw", 1);     //achievement_streak_of_100
+                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQJA", 1);     //achievement_streak_if_150
+                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQJQ", 1);     //achievement_streak_of_200
+                }
+                else if (Questions.INCORRECT_ANSWERS == Questions.QUESTION_COUNT){
+                    achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQBg");           //achievement_bummer_star
+                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBw", 1);     //achievement_bummer_king
+                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQCA", 1);     //achievement_emperor_of_bummerville
+                }
+                else if (Questions.CORRECT_ANSWERS == (Questions.QUESTION_COUNT/2)){
+                    achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQJg");           //achievement_positive_halfsies
+                }
+                else if (Questions.INCORRECT_ANSWERS == (Questions.QUESTION_COUNT/2)){
+                    achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQJw");           //achievement_negative_halfsies
+                }
+                else if (Questions.SKIPPED_ANSWERS == Questions.QUESTION_COUNT){
+                    achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQIQ");           //achievement_skippy
+                }
+                break;
+            case "showResultsInDetail":
+//                getAndRemoveActiveFragment("resultsInDetail");
+                loadFragment("resultsInDetail");
+                break;
+            case "finishResultsFragment":
+                fragmentManager.popBackStackImmediate();
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    //        onFragmentInteraction of ResultsInDetail fragment
+    @Override
+    public void onFragmentInteraction() {
+        getAndRemoveActiveFragment("resultsInDetail");
+    }
+
+    public void resetFlags(){
+        Questions.QUESTION_COUNT = 0;
+        Questions.CORRECT_ANSWERS = 0;
+        Questions.INCORRECT_ANSWERS = 0;
+        dbHandler.open();
+        dbHandler.resetTables();
+        dbHandler.close();
     }
 
     @Override
@@ -526,56 +630,83 @@ public class MainActivity extends LoginActivity
             getAndRemoveActiveFragment(LEADERBOARD_TEXT);
             return;
         }
-        int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
-
-        if(backStackCount >= 1){
-            //noinspection ConstantConditions
-            getSupportActionBar().show();
-            if (backStackCount == 2){
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Sure to exit the current quiz?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Difficulty.BACK_FROM_RESULTS = 2;
-                        Questions.QUESTION_COUNT = 0;
-                        Questions.CORRECT_ANSWERS = 0;
-                        Questions.INCORRECT_ANSWERS = 0;
-                        dbHandler.open();
-                        dbHandler.resetTables();
-                        dbHandler.close();
-                        Questions.wannaGoToHome = true;
-                        getSupportFragmentManager().popBackStackImmediate();
-                        getSupportFragmentManager().popBackStackImmediate();
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Difficulty.BACK_FROM_RESULTS = 0;
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
-            }else {
-                getSupportFragmentManager().popBackStackImmediate();
-            }
+        if(ResultsInDetail.isFragmentActive){
+            getAndRemoveActiveFragment("resultsInDetail");
+            return;
         }
-        else {
-            if (doubleBackToExitPressedOnce) {
-                super.onBackPressed();
-                return;
-            }
+        int backStackCount = fragmentManager.getBackStackEntryCount();
 
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "Hit back again to exit", Toast.LENGTH_SHORT).show();
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
+        switch (backStackCount){
+            case 1:
+//            in Difficulty fragment
+                fragmentManager.popBackStackImmediate();
+                break;
+//            in Questions fragment
+            case 2:
+                if (!Results.isFragmentActive) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage("Sure to exit the current quiz?");
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Difficulty.BACK_FROM_RESULTS = 2;
+                            resetFlags();
+                            Questions.wannaGoToHome = true;
+                            fragmentManager.popBackStackImmediate();
+                            fragmentManager.popBackStackImmediate();
+                        }
+                    });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Difficulty.BACK_FROM_RESULTS = 0;
+                            dialog.cancel();
+                        }
+                    });
+                    builder.show();
                 }
-            }, 2000);
+                else {
+//            in Results fragment
+                    //Place Ads
+
+                    ResultsInDetail.isFragmentActive = false;
+                    if (doubleBackToExitPressedOnce) {
+                        doubleBackToExitPressedOnce = false;
+                        resetFlags();
+                        Questions.wannaGoToHome = true;
+                        fragmentManager.popBackStackImmediate();
+                        fragmentManager.popBackStackImmediate();
+                        return;
+                    }
+
+                    this.doubleBackToExitPressedOnce = true;
+                    Toast.makeText(this, "Don't forget to share your QuizResult!\nIf you have, hit back again to goto home", Toast.LENGTH_SHORT).show();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            doubleBackToExitPressedOnce = false;
+                        }
+                    }, 2000);
+                }
+                break;
+            default:
+                if (doubleBackToExitPressedOnce) {
+                    doubleBackToExitPressedOnce = false;
+                    super.onBackPressed();
+                    return;
+                }
+
+                this.doubleBackToExitPressedOnce = true;
+                Toast.makeText(this, "Hit back again to exit", Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+                break;
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.prembros.programming.quizapp;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ public class Difficulty extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onAttach(context);
         BACK_FROM_RESULTS = 0;
         if (getArguments() != null) {
