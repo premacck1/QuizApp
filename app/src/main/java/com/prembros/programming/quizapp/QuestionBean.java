@@ -3,7 +3,7 @@ package com.prembros.programming.quizapp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
+/*
  * Created by Prem $ on 7/4/2016.
  */
 public class QuestionBean implements Parcelable {
@@ -30,9 +30,9 @@ public class QuestionBean implements Parcelable {
         option4 = input.readString();
         answer = input.readString();
     }
-    public String getdifficulty() {
-        return difficulty;
-    }
+//    public String getDifficulty() {
+//        return difficulty;
+//    }
 
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
@@ -88,13 +88,11 @@ public class QuestionBean implements Parcelable {
 
     @Override
     public int describeContents() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        // TODO Auto-generated method stub
         dest.writeString(difficulty);
         dest.writeString(question);
         dest.writeString(option1);
