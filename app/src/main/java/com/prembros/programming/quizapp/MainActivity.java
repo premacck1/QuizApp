@@ -544,17 +544,14 @@ public class MainActivity extends LoginActivity
                 * Submit score to leaderboard
                 */
                 if (isStoreVersion(this)) {
-                    if (google_api_client != null) {
-                        if (!google_api_client.isConnected()){
-                            google_api_client.connect();
-                        }
+                    if (google_api_client != null && google_api_client.isConnected()) {
                         if (Questions.SCORE > 0) {
                             Games.Leaderboards.submitScore(google_api_client,
                                     getLeaderboardID(Questions.selections[0], Questions.selections[1]), Questions.SCORE);
                         }
                         else Toast.makeText(this, "Score above zero to be in leaderboards", Toast.LENGTH_LONG).show();
                     }
-//                    else Toast.makeText(this, "Play Games Error! Can't upload score", Toast.LENGTH_SHORT).show();
+                    else Toast.makeText(this, "Play Games Error! Can't upload score", Toast.LENGTH_SHORT).show();
                 } else Toast.makeText(this,
                         "Download this app from Play Store to Participate in Leaderboards", Toast.LENGTH_LONG).show();
                 break;
