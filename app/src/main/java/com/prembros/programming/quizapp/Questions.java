@@ -64,7 +64,7 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
     private CheckedTextView option4;
     private CheckedTextView[] allCheckedTextViews;
     private ProgressBar questionProgressBar, timeProgressBar;
-    private InterstitialAd mInterstitialAd3;
+//    private InterstitialAd mInterstitialAd3;
     private InterstitialAd mInterstitialAd1;
     private InterstitialAd mInterstitialAd2;
     private View rootView;
@@ -181,10 +181,10 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
             // set the ad unit ID
             mInterstitialAd2.setAdUnitId(getString(R.string.int_add_full1));
 
-            //Set up ads
+/*            //Set up ads
             mInterstitialAd3 = new InterstitialAd(getContext());
             // set the ad unit ID
-            mInterstitialAd3.setAdUnitId(getString(R.string.int_add_full2));
+            mInterstitialAd3.setAdUnitId(getString(R.string.int_add_full2));*/
 
             requestNewInterstitial();
             new Handler().postDelayed(new Runnable() {
@@ -562,7 +562,7 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
         alert.show();
 
 //        SHOW ADS
-        showInterstitial3();
+//        showInterstitial3();
     }
 
     public void pieDisplayError(int correctAnswers, int incorrectAnswers, int skippedAnswers, int questionCount){
@@ -666,11 +666,11 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
         }
     }
 
-    private void showInterstitial3() {
+/*    private void showInterstitial3() {
         if (mInterstitialAd3.isLoaded()) {
             mInterstitialAd3.show();
-        }
-    }
+        }*/
+//    }
 
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -678,7 +678,7 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
         // Load ads into Interstitial Ads
         mInterstitialAd1.loadAd(adRequest);
         mInterstitialAd2.loadAd(adRequest);
-        mInterstitialAd3.loadAd(adRequest);
+//        mInterstitialAd3.loadAd(adRequest);
     }
 
     @Override
