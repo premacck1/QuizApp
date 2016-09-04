@@ -24,6 +24,8 @@ public class Help extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.help, container, false);
         rootView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fragment_anim_in));
+        String text = getString(R.string.help_want_more_features_content) + getString(R.string.get_pro_coming_soon);
+        ((CustomTextViewLight) rootView.findViewById(R.id.more_features_content)).setText(text);
         CustomTextViewBlack getPro = (CustomTextViewBlack) rootView.findViewById(R.id.get_pro);
         getPro.setOnClickListener(new View.OnClickListener() {
             @Override

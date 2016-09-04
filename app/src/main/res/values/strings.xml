@@ -177,6 +177,7 @@
                         \n*Personal score history
                         \n\n*Also, the developers really appreciate your contribution!
     </string>
+    <string name="get_pro_coming_soon">\n\nWe\'re currently working on the pro version. It will be available to you as soon as possible.</string>
     <string name="get_pro_redirect">You will now be taken to our Play Store page.
                                 \nInstall "QuizApp Pro" from there.
     </string>

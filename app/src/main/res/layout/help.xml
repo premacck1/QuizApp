@@ -126,11 +126,11 @@
                 android:background="@color/black" />
 
             <com.prembros.programming.quizapp.CustomTextViewLight
+                android:id="@+id/more_features_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:text="@string/help_want_more_features_content"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 

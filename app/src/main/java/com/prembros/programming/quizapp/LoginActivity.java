@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -275,25 +274,27 @@ public class LoginActivity extends AppCompatActivity implements OnConnectionFail
             case R.id.action_get_pro:
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.setTitle(R.string.get_pro);
-                alert.setMessage(R.string.get_pro_content);
+                String message = getString(R.string.get_pro_content) + getString(R.string.get_pro_coming_soon);
+                alert.setMessage(message);
                 alert.setPositiveButton("Get Pro", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(LoginActivity.this, R.string.get_pro_redirect, Toast.LENGTH_LONG).show();
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=Prem+Bros")));
-                            }
-                        }, 2000);
+                        dialog.dismiss();
+//                        Toast.makeText(LoginActivity.this, R.string.get_pro_redirect, Toast.LENGTH_LONG).show();
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=Prem+Bros")));
+//                            }
+//                        }, 2000);
                     }
                 });
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+//                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                });
                 alert.show();
                 break;
         }
