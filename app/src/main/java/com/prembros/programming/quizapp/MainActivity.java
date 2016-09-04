@@ -560,30 +560,28 @@ public class MainActivity extends LoginActivity
                 /*
                 * Unlock achievements if any
                 */
-                Achievements achievements = Games.Achievements;
-                if (Questions.CORRECT_ANSWERS == Questions.QUESTION_COUNT){
-                    achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQAg");           //achievement_beginners_luck
-                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQAw", 1);     //achievement_streak_of_5
-                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBA", 1);     //achievement_streak_of_15
-                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBQ", 1);     //achievement_streak_of_30
-                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQIg", 1);     //achievement_streak_of_50
-                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQIw", 1);     //achievement_streak_of_100
-                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQJA", 1);     //achievement_streak_if_150
-                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQJQ", 1);     //achievement_streak_of_200
-                }
-                else if (Questions.INCORRECT_ANSWERS == Questions.QUESTION_COUNT){
-                    achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQBg");           //achievement_bummer_star
-                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBw", 1);     //achievement_bummer_king
-                    achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQCA", 1);     //achievement_emperor_of_bummerville
-                }
-                else if (Questions.CORRECT_ANSWERS == (Questions.QUESTION_COUNT/2)){
-                    achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQJg");           //achievement_positive_halfsies
-                }
-                else if (Questions.INCORRECT_ANSWERS == (Questions.QUESTION_COUNT/2)){
-                    achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQJw");           //achievement_negative_halfsies
-                }
-                else if (Questions.SKIPPED_ANSWERS == Questions.QUESTION_COUNT){
-                    achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQIQ");           //achievement_skippy
+                if (google_api_client != null && google_api_client.isConnected()) {
+                    Achievements achievements = Games.Achievements;
+                    if (Questions.CORRECT_ANSWERS == Questions.QUESTION_COUNT) {
+                        achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQAg");           //achievement_beginners_luck
+                        achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQAw", 1);     //achievement_streak_of_5
+                        achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBA", 1);     //achievement_streak_of_15
+                        achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBQ", 1);     //achievement_streak_of_30
+                        achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQIg", 1);     //achievement_streak_of_50
+                        achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQIw", 1);     //achievement_streak_of_100
+                        achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQJA", 1);     //achievement_streak_if_150
+                        achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQJQ", 1);     //achievement_streak_of_200
+                    } else if (Questions.INCORRECT_ANSWERS == Questions.QUESTION_COUNT) {
+                        achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQBg");           //achievement_bummer_star
+                        achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQBw", 1);     //achievement_bummer_king
+                        achievements.increment(google_api_client, "CgkIl-nPp9wBEAIQCA", 1);     //achievement_emperor_of_bummerville
+                    } else if (Questions.CORRECT_ANSWERS == (Questions.QUESTION_COUNT / 2)) {
+                        achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQJg");           //achievement_positive_halfsies
+                    } else if (Questions.INCORRECT_ANSWERS == (Questions.QUESTION_COUNT / 2)) {
+                        achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQJw");           //achievement_negative_halfsies
+                    } else if (Questions.SKIPPED_ANSWERS == Questions.QUESTION_COUNT) {
+                        achievements.unlock(google_api_client, "CgkIl-nPp9wBEAIQIQ");           //achievement_skippy
+                    }
                 }
                 break;
             case "showResultsInDetail":
