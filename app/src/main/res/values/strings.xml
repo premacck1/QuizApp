@@ -160,16 +160,15 @@
     </string>
     <string name="connect_to_google_play_games">Connect to Google Play Games</string>
     <string name="quiz">Quiz</string>
-     <string name="int_add_full">ca-app-pub-3940256099942544/6300978111</string><!--ca-app-pub-3940256099942544/6300978111-->
-    <string name="int_add_full1">ca-app-pub-3940256099942544/6300978111</string><!--ca-app-pub-3940256099942544/6300978111-->
-    <string name="int_add_full2">ca-app-pub-3940256099942544/6300978111</string><!--ca-app-pub-3940256099942544/6300978111-->
-    <string name="int_add_full_bookmark">ca-app-pub-3940256099942544/6300978111</string><!--ca-app-pub-3940256099942544/6300978111-->
-
-   <!-- <string name="int_add_full">ca-app-pub-0057541165660355/5470334687</string>&lt;!&ndash;ca-app-pub-3940256099942544/6300978111&ndash;&gt;
-    <string name="int_add_full1">ca-app-pub-0057541165660355/4940454280</string>&lt;!&ndash;ca-app-pub-3940256099942544/6300978111&ndash;&gt;
-    <string name="int_add_full2">ca-app-pub-0057541165660355/6417187483</string>&lt;!&ndash;ca-app-pub-3940256099942544/6300978111&ndash;&gt;
-    <string name="int_add_full_bookmark">ca-app-pub-0057541165660355/5152277085</string>&lt;!&ndash;ca-app-pub-3940256099942544/6300978111&ndash;&gt;
+    <!-- <string name="int_add_full">ca-app-pub-3940256099942544/6300978111</string>&lt;!&ndash;ca-app-pub-3940256099942544/6300978111&ndash;&gt;
+    <string name="int_add_full1">ca-app-pub-3940256099942544/6300978111</string>&lt;!&ndash;ca-app-pub-3940256099942544/6300978111&ndash;&gt;
+    <string name="int_add_full2">ca-app-pub-3940256099942544/6300978111</string>&lt;!&ndash;ca-app-pub-3940256099942544/6300978111&ndash;&gt;
+    <string name="int_add_full_bookmark">ca-app-pub-3940256099942544/6300978111</string>&lt;!&ndash;ca-app-pub-3940256099942544/6300978111&ndash;&gt;
 -->
+    <string name="int_add_full">ca-app-pub-0057541165660355/5470334687</string><!--ca-app-pub-3940256099942544/6300978111-->
+    <string name="int_add_full1">ca-app-pub-0057541165660355/4940454280</string><!--ca-app-pub-3940256099942544/6300978111-->
+    <string name="int_add_full2">ca-app-pub-0057541165660355/6417187483</string><!--ca-app-pub-3940256099942544/6300978111-->
+    <string name="int_add_full_bookmark">ca-app-pub-0057541165660355/5152277085</string><!--ca-app-pub-3940256099942544/6300978111-->
     <string name="times_up">Times up!</string><!--ca-app-pub-0057541165660355/5470334687-->
     <string name="get_pro_content">Pro version comes with the following features:
                         \n\n*No Ads
