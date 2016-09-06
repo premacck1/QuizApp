@@ -3,7 +3,6 @@ package com.prembros.programming.quizapp;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -25,7 +24,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -57,7 +55,7 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
     private TextView question;
     private ImageButton fabPrevious, fabSkip, fabNext;
     //    private CustomTextViewLight timer;
-    private ToggleButton addBookmark;
+//    private ToggleButton addBookmark;
     private CheckedTextView option1;
     private CheckedTextView option2;
     private CheckedTextView option3;
@@ -78,7 +76,7 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
     @Override
     public void onResume() {
         setHasOptionsMenu(true);
-        resumeBookmarkAction(addBookmark);
+//        resumeBookmarkAction(addBookmark);
         super.onResume();
     }
 
@@ -231,11 +229,11 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
         option2.setOnClickListener(this);
         option3.setOnClickListener(this);
         option4.setOnClickListener(this);
-        addBookmark.setOnClickListener(this);
+//        addBookmark.setOnClickListener(this);
         fabNext.setOnClickListener(this);
         fabPrevious.setOnClickListener(this);
         fabSkip.setOnClickListener(this);
-        addBookmark.setOnLongClickListener(this);
+//        addBookmark.setOnLongClickListener(this);
         fabNext.setOnLongClickListener(this);
         fabPrevious.setOnLongClickListener(this);
         fabSkip.setOnLongClickListener(this);
@@ -256,9 +254,9 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
             case R.id.checked_choice_button4:
                 clickAction(option4);
                 break;
-            case R.id.addBookmark:
-                bookmarkAction(addBookmark);
-                break;
+//            case R.id.addBookmark:
+//                bookmarkAction(addBookmark);
+//                break;
             case R.id.fabNext:
                 if (selectedOption != null){
                     dbHandler.open();
@@ -328,9 +326,9 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
     @Override
     public boolean onLongClick(View view) {
         switch (view.getId()){
-            case R.id.addBookmark:
-                Toast.makeText(getContext(), "Add / Remove bookmark", Toast.LENGTH_SHORT).show();
-                return true;
+//            case R.id.addBookmark:
+//                Toast.makeText(getContext(), "Add / Remove bookmark", Toast.LENGTH_SHORT).show();
+//                return true;
             case R.id.fabNext:
                 Toast.makeText(getContext(), "Next question", Toast.LENGTH_SHORT).show();
                 return true;
@@ -376,7 +374,7 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
     public void instantiate(){
         questionProgressBar = (ProgressBar) rootView.findViewById(R.id.question_progressBar);
         timeProgressBar = (ProgressBar) rootView.findViewById(R.id.time_progressBar);
-        addBookmark = (ToggleButton) rootView.findViewById(R.id.addBookmark);
+//        addBookmark = (ToggleButton) rootView.findViewById(R.id.addBookmark);
         question = (TextView) rootView.findViewById(R.id.question_textView);
         fabPrevious = (ImageButton) rootView.findViewById(R.id.fabPrevious);
         fabSkip = (ImageButton) rootView.findViewById(R.id.fabSkip);
@@ -406,8 +404,8 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
         option4.setText(questionBean.getOption4().trim());
         option4.setChecked(false);
         option4.setTextColor(Color.parseColor("#000000"));
-        addBookmark.setChecked(false);
-        isBookmarked();
+//        addBookmark.setChecked(false);
+//        isBookmarked();
     }
 
     public void clickAction(View v) {
@@ -431,77 +429,77 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
         }
     }
 
-    public boolean isBookmarked(){
-        dbHandler.open();
-        boolean areQuestionsEqual = false;
-        Cursor questionToBeCompared = dbHandler.returnQuestion();
-        questionToBeCompared.moveToNext();
-        if (!questionToBeCompared.isAfterLast()) {
-            while (!questionToBeCompared.isAfterLast()) {
-                String questionInDb = questionToBeCompared.getString(questionToBeCompared.getColumnIndex("question"));
-                String questionOnScreen = question.getText().toString();
+//    public boolean isBookmarked(){
+//        dbHandler.open();
+//        boolean areQuestionsEqual = false;
+//        Cursor questionToBeCompared = dbHandler.returnQuestion();
+//        questionToBeCompared.moveToNext();
+//        if (!questionToBeCompared.isAfterLast()) {
+//            while (!questionToBeCompared.isAfterLast()) {
+//                String questionInDb = questionToBeCompared.getString(questionToBeCompared.getColumnIndex("question"));
+//                String questionOnScreen = question.getText().toString();
+//
+////            REPLACE THE SINGLE QUOTES (THAT RESULT IN SQLiteException)
+///*          if (questionInDb.contains("'"))
+//                questionInDb = questionInDb.replace("'", "\'");
+//            if(questionOnScreen.contains("'"))
+//                questionOnScreen = questionOnScreen.replace("'", "\'");
+//*/
+//
+////            CHECK IF THE QUESTION IS ALREADY BOOKMARKED
+//                areQuestionsEqual = questionOnScreen.equalsIgnoreCase(questionInDb);
+//                if (areQuestionsEqual) {
+//                    questionToBeCompared.moveToLast();
+//                    questionToBeCompared.moveToNext();
+//                }
+//                questionToBeCompared.moveToNext();
+//            }
+//        }
+//        if (areQuestionsEqual) {
+//            addBookmark.setChecked(true);
+//            dbHandler.close();
+//            return true;
+//        } else {
+//            addBookmark.setChecked(false);
+//            dbHandler.close();
+//            return false;
+//        }
+//    }
 
-//            REPLACE THE SINGLE QUOTES (THAT RESULT IN SQLiteException)
-/*          if (questionInDb.contains("'"))
-                questionInDb = questionInDb.replace("'", "\'");
-            if(questionOnScreen.contains("'"))
-                questionOnScreen = questionOnScreen.replace("'", "\'");
-*/
+//    public void resumeBookmarkAction(ToggleButton t) {
+//        if(isBookmarked()) {
+//            t.setChecked(true);
+//        }
+//        else t.setChecked(false);
+//    }
 
-//            CHECK IF THE QUESTION IS ALREADY BOOKMARKED
-                areQuestionsEqual = questionOnScreen.equalsIgnoreCase(questionInDb);
-                if (areQuestionsEqual) {
-                    questionToBeCompared.moveToLast();
-                    questionToBeCompared.moveToNext();
-                }
-                questionToBeCompared.moveToNext();
-            }
-        }
-        if (areQuestionsEqual) {
-            addBookmark.setChecked(true);
-            dbHandler.close();
-            return true;
-        } else {
-            addBookmark.setChecked(false);
-            dbHandler.close();
-            return false;
-        }
-    }
-
-    public void resumeBookmarkAction(ToggleButton t) {
-        if(isBookmarked()) {
-            t.setChecked(true);
-        }
-        else t.setChecked(false);
-    }
-
-    public void bookmarkAction(ToggleButton t) {
-        if(t !=null) {
-//            IF THE QUESTION IS BOOKMARKED
-            if (!t.isChecked()) {
-                t.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_deselected));
-                dbHandler.open();
-                dbHandler.deleteData(question.getText().toString());
-                dbHandler.close();
-                Toast.makeText(getContext(), "Removed from bookmarks", Toast.LENGTH_SHORT).show();
-            }
-//            IF THE QUESTION IS NOT BOOKMARKED
-            else {
-                t.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_selected));
-                dbHandler.open();
-                dbHandler.insertData(selections[0], selections[1],
-                        question.getText().toString(),
-                        option1.getText().toString(),
-                        option2.getText().toString(),
-                        option3.getText().toString(),
-                        option4.getText().toString(),
-                        answer);
-
-                dbHandler.close();
-                Toast.makeText(getContext(), "Added to bookmarks", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+//    public void bookmarkAction(ToggleButton t) {
+//        if(t !=null) {
+////            IF THE QUESTION IS BOOKMARKED
+//            if (!t.isChecked()) {
+//                t.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_deselected));
+//                dbHandler.open();
+//                dbHandler.deleteData(question.getText().toString());
+//                dbHandler.close();
+//                Toast.makeText(getContext(), "Removed from bookmarks", Toast.LENGTH_SHORT).show();
+//            }
+////            IF THE QUESTION IS NOT BOOKMARKED
+//            else {
+//                t.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_selected));
+//                dbHandler.open();
+//                dbHandler.insertData(selections[0], selections[1],
+//                        question.getText().toString(),
+//                        option1.getText().toString(),
+//                        option2.getText().toString(),
+//                        option3.getText().toString(),
+//                        option4.getText().toString(),
+//                        answer);
+//
+//                dbHandler.close();
+//                Toast.makeText(getContext(), "Added to bookmarks", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
     public void showNextQuestion(){
         previousQuestion.push(questionBean);
@@ -510,7 +508,7 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
 
         if (QUESTION_COUNT < questionList.size()){
             selectedOption = null;
-            addBookmark.setChecked(false);
+//            addBookmark.setChecked(false);
             questionBean = questionList.get(QUESTION_COUNT);
             populate();
             answer = questionBean.getAnswer();

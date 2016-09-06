@@ -21,6 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.achievement.Achievements;
 import com.kobakei.ratethisapp.RateThisApp;
@@ -53,6 +56,7 @@ public class MainActivity extends LoginActivity
     private String version;
     private DatabaseHolder dbHandler;
     public ProgressDialog progressDialogMainActivity;
+    private InterstitialAd mInterstitialAd3;
 
     @Override
     public boolean releaseInstance() {
@@ -76,6 +80,19 @@ public class MainActivity extends LoginActivity
         if (savedInstanceState != null) {
             return;
         }
+
+        //Set up ads
+        mInterstitialAd3 = new InterstitialAd(this);
+        // set the ad unit ID
+        mInterstitialAd3.setAdUnitId(getString(R.string.int_add_full2));
+
+        requestNewInterstitial();
+        mInterstitialAd3.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+            }
+        });
 
         if (progress_dialog!=null) progress_dialog.dismiss();
 
@@ -394,30 +411,10 @@ public class MainActivity extends LoginActivity
                 this.finish();
                 return true;
             case R.id.action_get_pro:
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setTitle(R.string.get_pro);
-                String message = getString(R.string.get_pro_content) + getString(R.string.get_pro_coming_soon);
-                alert.setMessage(message);
-                alert.setPositiveButton("Get Pro", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-//                        Toast.makeText(LoginActivity.this, R.string.get_pro_redirect, Toast.LENGTH_LONG).show();
-//                        new Handler().postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=Prem+Bros")));
-//                            }
-//                        }, 2000);
-                    }
-                });
-//                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.cancel();
-//                    }
-//                });
-                alert.show();
+                getPro();
+                return true;
+            case R.id.action_bookmark:
+                getPro();
                 return true;
             case R.id.action_leaderboard:
                 getAndRemoveActiveFragment(LEADERBOARD_TEXT);
@@ -425,9 +422,6 @@ public class MainActivity extends LoginActivity
                 return true;
             case R.id.action_achievements:
                 loadFragment(ACHIEVEMENTS_TEXT);
-                return true;
-            case R.id.action_bookmark:
-                startActivity(new Intent(this, Bookmarks.class));
                 return true;
             case R.id.action_rate_this_app:
                 RateThisApp.showRateDialog(this);
@@ -443,6 +437,53 @@ public class MainActivity extends LoginActivity
             default:
                 return false;
         }
+    }
+
+    public void getPro(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(R.string.get_pro);
+        String message = getString(R.string.get_pro_content) + getString(R.string.get_pro_coming_soon);
+        alert.setMessage(message);
+        alert.setPositiveButton("Get Pro", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+//                        Toast.makeText(LoginActivity.this, R.string.get_pro_redirect, Toast.LENGTH_LONG).show();
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=Prem+Bros")));
+//                            }
+//                        }, 2000);
+            }
+        });
+//                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                });
+        alert.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                SHOW ADS
+                showInterstitial3();
+            }
+        }, 1000);
+    }
+
+    private void showInterstitial3() {
+        if (mInterstitialAd3.isLoaded()) {
+            mInterstitialAd3.show();
+        }
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        // Load ads into Interstitial Ads
+        mInterstitialAd3.loadAd(adRequest);
     }
 
     //    onFragmentInteraction of Field fragment

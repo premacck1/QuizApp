@@ -24,7 +24,7 @@
         android:layout_below="@+id/question_progressBar"
         android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
 
-    <ToggleButton
+<!--    <ToggleButton
         android:textOff=""
         android:textOn=""
         android:hapticFeedbackEnabled="true"
@@ -35,7 +35,7 @@
         android:contentDescription="@string/add_or_remove_bookmark"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true" />-->
 
     <ScrollView
         android:layout_width="match_parent"

@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /*
  * Created by Prem $ on 7/4/2016.
  */
+@SuppressWarnings("unused")
 public class DatabaseHolder {
     public static final String field = "field";
     public static final String difficulty = "difficulty";

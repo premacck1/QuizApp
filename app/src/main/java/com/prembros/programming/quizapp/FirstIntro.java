@@ -31,8 +31,8 @@ public class FirstIntro extends AppIntro2 {
                 "\n\nIt is Integrated with Google so that you can keep track of your high scores and compete with your friends",
                 R.drawable.game_controller, rgb(7, 107, 112)));
 
-        addSlide(AppIntroFragment.newInstance("Bookmarks", "You can have Bookmarks in QuizApp!." +
-                        "\n\nYou can review them later in the Bookmarks section.",
+        addSlide(AppIntroFragment.newInstance("Bookmarks", "The Pro version comes with bookmarks!." +
+                        "\n\nBookmark questions during quiz, and review them later in the Bookmarks section.",
                 R.drawable.bookmarks_see, rgb(74,20,140)));
 
         addSlide(AppIntroFragment.newInstance("All caught up!", "So now that you're familiar with the features, let's get started!",
