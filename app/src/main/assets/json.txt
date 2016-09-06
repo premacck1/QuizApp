@@ -391,7 +391,7 @@
           "opt2": "iPhone OS",
           "opt3": "iPod OS",
           "opt4": "iOS is the original name",
-          "ans": ""
+          "ans": "iPhone OS"
         },
         {
           "question": "Who has the largest market share for tablets worldwide?",
@@ -761,7 +761,7 @@
           "opt2": "<b>",
           "opt3": "<strong>",
           "opt4": "<important>",
-          "ans": "<important>"
+          "ans": "<strong>"
         },
         {
           "question": "Choose the correct HTML element to define emphasized text:",
@@ -785,15 +785,15 @@
           "opt2": "target=\"_blank\"",
           "opt3": "\"url\" new",
           "opt4": "target=\"new tab\"",
-          "ans": "target=\"new\">"
+          "ans": "target=\"_blank\"">"
         },
         {
           "question": "Which of these elements are all <table> elements?",
           "opt1": "<table><head><tfoot>",
           "opt2": "<thead><body><tr>",
-          "opt3": "<table><tr><tt>",
+          "opt3": "<table><tr><td>",
           "opt4": "<table><title><td>",
-          "ans": "<table><head><tfoot>"
+          "ans": "<table><tr><td>"
         },
         {
           "question": "Inline elements are normally displayed without starting a new line.",
