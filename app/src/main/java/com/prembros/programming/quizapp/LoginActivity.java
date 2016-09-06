@@ -66,7 +66,9 @@ public class LoginActivity extends AppCompatActivity implements OnConnectionFail
         super.onCreate(savedInstanceState);
 
         buildNewGoogleApiClient();
-        google_api_client.connect();
+        if (google_api_client!=null) {
+            google_api_client.connect();
+        }
 
         if (this.toString().contains("LoginActivity")) {
             setContentView(R.layout.activity_login);
