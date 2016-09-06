@@ -785,7 +785,7 @@
           "opt2": "target=\"_blank\"",
           "opt3": "\"url\" new",
           "opt4": "target=\"new tab\"",
-          "ans": "target=\"_blank\"">"
+          "ans": "target=\"_blank\""
         },
         {
           "question": "Which of these elements are all <table> elements?",

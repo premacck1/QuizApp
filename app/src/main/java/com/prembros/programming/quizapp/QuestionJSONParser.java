@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
+/*
  * Created by Prem $ on 7/4/2016.
  */
 public class QuestionJSONParser extends ArrayList<QuestionBean> {
