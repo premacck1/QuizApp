@@ -18,14 +18,21 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
+import com.applovin.sdk.AppLovinSdk;
+import com.chartboost.sdk.Chartboost;
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.achievement.Achievements;
+import com.jirbo.adcolony.AdColony;
 import com.kobakei.ratethisapp.RateThisApp;
 
 import org.json.JSONException;
@@ -47,16 +54,21 @@ public class MainActivity extends LoginActivity
         Difficulty.OnFragmentInteractionListener,
         Questions.OnFragmentInteractionListener,
         Results.OnFragmentInteractionListenerInResults,
-        ResultsInDetail.OnFragmentInteractionListener{
+        ResultsInDetail.OnFragmentInteractionListener {
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private String JSONString = null;
     boolean doubleBackToExitPressedOnce = false;
     protected static ArrayList<QuestionBean> QUESTION = null;
     private String version;
+    private boolean isRewardedVideoAdiOSLoading = false,
+            isRewardedVideoAdJavaLoading = false,
+            isRewardedVideoAdHTMLLoading = false,
+            isRewardedVideoAdJSLoading = false;
     private DatabaseHolder dbHandler;
     public ProgressDialog progressDialogMainActivity;
     private InterstitialAd mInterstitialAd3;
+    private RewardedVideoAd mRewardedVideoAdiOS, mRewardedVideoAdJava, mRewardedVideoAdHTML, mRewardedVideoAdJS;
 
     @Override
     public boolean releaseInstance() {
@@ -80,6 +92,15 @@ public class MainActivity extends LoginActivity
         if (savedInstanceState != null) {
             return;
         }
+
+        AdColony.configure(this, "version:1.11,store:google", "app37e76e4fec5f493591", "vz6039927ae3ee42ed8e");
+        Chartboost.startWithAppId(this, "57d270c943150f1f694f7316", "a5c83b4430cca0bd826a41b6e23c75c939d8efa1");
+        Chartboost.onCreate(this);
+        AppLovinSdk.initializeSdk(this);
+
+        //set up & load rewarded ads
+        setUpRewardedAds();
+        loadRewardedVideoAds();
 
         //Set up ads
         mInterstitialAd3 = new InterstitialAd(this);
@@ -486,9 +507,242 @@ public class MainActivity extends LoginActivity
         mInterstitialAd3.loadAd(adRequest);
     }
 
+    public void setUpRewardedAds(){
+        mRewardedVideoAdiOS = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAdiOS.setRewardedVideoAdListener(setRewardedVideoAdListeners("iOS"));
+        mRewardedVideoAdJava = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAdJava.setRewardedVideoAdListener(setRewardedVideoAdListeners("Java"));
+        mRewardedVideoAdHTML = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAdHTML.setRewardedVideoAdListener(setRewardedVideoAdListeners("HTML"));
+        mRewardedVideoAdJS = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAdJS.setRewardedVideoAdListener(setRewardedVideoAdListeners("JS"));
+    }
+
+    public RewardedVideoAdListener setRewardedVideoAdListeners(String field){
+        RewardedVideoAdListener rewardedVideoAdListener;
+        switch (field){
+            case "iOS":
+                rewardedVideoAdListener = new RewardedVideoAdListener() {
+                    @Override
+                    public void onRewardedVideoAdLoaded() {
+                        isRewardedVideoAdiOSLoading = true;
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdiOSLoaded", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdOpened() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdiOSOpened", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoStarted() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoiOSStarted", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdClosed() {
+                        isRewardedVideoAdiOSLoading = false;
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdiOSClosed", Toast.LENGTH_SHORT).show();
+                        loadRewardedVideoAds();
+                    }
+
+                    @Override
+                    public void onRewarded(RewardItem rewardItem) {
+                        Toast.makeText(MainActivity.this, "Unlocked " + rewardItem.getAmount() + " " + rewardItem.getType() , Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdLeftApplication() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdiOSLeftApplication", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdFailedToLoad(int i) {
+                        isRewardedVideoAdiOSLoading = false;
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdiOSFailedToLoad", Toast.LENGTH_SHORT).show();
+                    }
+                };
+                return rewardedVideoAdListener;
+            case "Java":
+                rewardedVideoAdListener = new RewardedVideoAdListener() {
+                    @Override
+                    public void onRewardedVideoAdLoaded() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdJavaLoaded", Toast.LENGTH_SHORT).show();
+                        isRewardedVideoAdJavaLoading = true;
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdOpened() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdJavaOpened", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoStarted() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoJavaStarted", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdClosed() {
+                        isRewardedVideoAdJavaLoading = false;
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdJavaClosed", Toast.LENGTH_SHORT).show();
+                        loadRewardedVideoAds();
+                    }
+
+                    @Override
+                    public void onRewarded(RewardItem rewardItem) {
+                        Toast.makeText(MainActivity.this, "Unlocked " + rewardItem.getAmount() + " " + rewardItem.getType() , Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdLeftApplication() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdJavaLeftApplication", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdFailedToLoad(int i) {
+                        isRewardedVideoAdJavaLoading = false;
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdJavaFailedToLoad", Toast.LENGTH_SHORT).show();
+                    }
+                };
+                return rewardedVideoAdListener;
+            case "HTML":
+                rewardedVideoAdListener = new RewardedVideoAdListener() {
+                    @Override
+                    public void onRewardedVideoAdLoaded() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdHTMLLoaded", Toast.LENGTH_SHORT).show();
+                        isRewardedVideoAdHTMLLoading = true;
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdOpened() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdHTMLOpened", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoStarted() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoHTMLStarted", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdClosed() {
+                        isRewardedVideoAdHTMLLoading = false;
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdHTMLClosed", Toast.LENGTH_SHORT).show();
+                        loadRewardedVideoAds();
+                    }
+
+                    @Override
+                    public void onRewarded(RewardItem rewardItem) {
+                        Toast.makeText(MainActivity.this, "Unlocked " + rewardItem.getAmount() + " " + rewardItem.getType() , Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdLeftApplication() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdHTMLLeftApplication", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdFailedToLoad(int i) {
+                        isRewardedVideoAdHTMLLoading = false;
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdHTMLFailedToLoad", Toast.LENGTH_SHORT).show();
+                    }
+                };
+                return rewardedVideoAdListener;
+            case "JS":
+                rewardedVideoAdListener = new RewardedVideoAdListener() {
+                    @Override
+                    public void onRewardedVideoAdLoaded() {
+                        isRewardedVideoAdJSLoading = false;
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdJSLoaded", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdOpened() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdJSOpened", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoStarted() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoJSStarted", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdClosed() {
+                        isRewardedVideoAdJSLoading = false;
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdJSClosed", Toast.LENGTH_SHORT).show();
+                        loadRewardedVideoAds();
+                    }
+
+                    @Override
+                    public void onRewarded(RewardItem rewardItem) {
+                        Toast.makeText(MainActivity.this, "Unlocked " + rewardItem.getAmount() + " " + rewardItem.getType() , Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdLeftApplication() {
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdJSLeftApplication", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRewardedVideoAdFailedToLoad(int i) {
+                        isRewardedVideoAdJSLoading = false;
+                        Toast.makeText(MainActivity.this, "onRewardedVideoAdJSFailedToLoad", Toast.LENGTH_SHORT).show();
+                    }
+                };
+                return rewardedVideoAdListener;
+            default:
+                return null;
+        }
+    }
+
+    public void loadRewardedVideoAds(){
+        synchronized (new Object()){
+            Bundle extras = new Bundle();
+            extras.putBoolean("_noRefresh", true);
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                    .build();
+            if (!isRewardedVideoAdiOSLoading && !mRewardedVideoAdiOS.isLoaded()) {
+                isRewardedVideoAdiOSLoading = true;
+                mRewardedVideoAdiOS.loadAd("ca-app-pub-0057541165660355/6958584285", adRequest);
+            }
+            if (!isRewardedVideoAdJavaLoading && !mRewardedVideoAdJava.isLoaded()) {
+                isRewardedVideoAdJavaLoading = true;
+                mRewardedVideoAdJava.loadAd("ca-app-pub-0057541165660355/2388783888", adRequest);
+            }
+            if (!isRewardedVideoAdHTMLLoading && !mRewardedVideoAdHTML.isLoaded()) {
+                isRewardedVideoAdHTMLLoading = true;
+                mRewardedVideoAdHTML.loadAd("ca-app-pub-0057541165660355/3865517083", adRequest);
+            }
+            if (!isRewardedVideoAdJSLoading && !mRewardedVideoAdJS.isLoaded()) {
+                isRewardedVideoAdJSLoading = true;
+                mRewardedVideoAdJS.loadAd("ca-app-pub-0057541165660355/5342250285", adRequest);
+            }
+        }
+    }
+
+    public void showRewardedVideoAD(String field){
+        switch (field){
+            case "iOS":
+                if (mRewardedVideoAdiOS.isLoaded()) mRewardedVideoAdiOS.show();
+                break;
+            case "Java":
+                if (mRewardedVideoAdJava.isLoaded()) mRewardedVideoAdJava.show();
+                break;
+            case "HTML":
+                if (mRewardedVideoAdHTML.isLoaded()) mRewardedVideoAdHTML.show();
+                break;
+            case "JS":
+                if (mRewardedVideoAdJS.isLoaded()) mRewardedVideoAdJS.show();
+                break;
+            default:
+                break;
+        }
+    }
+
     //    onFragmentInteraction of Field fragment
     @Override
-    public void onFragmentInteraction(View v, String field) {
+    public void onFragmentInteractionInField(final String field) {
         Difficulty.BACK_FROM_RESULTS = 0;
         Difficulty mdifficulty = new Difficulty();
         Bundle args = new Bundle();
@@ -498,11 +752,32 @@ public class MainActivity extends LoginActivity
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
                 android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
         transaction.replace(R.id.main_fragment_container, mdifficulty);
         transaction.addToBackStack("DifficultyLaunched");
         transaction.commit();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switch (field){
+                    case "iOS":
+                        showRewardedVideoAD("iOS");
+                        break;
+                    case "Java":
+                        showRewardedVideoAD("Java");
+                        break;
+                    case "HTML":
+                        showRewardedVideoAD("HTML");
+                        break;
+                    case "JavaScript":
+                        showRewardedVideoAD("JS");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }, 500);
     }
-
 
     //        onFragmentInteraction of Difficulty fragment
     @Override

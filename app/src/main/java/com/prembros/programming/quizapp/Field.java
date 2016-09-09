@@ -111,7 +111,7 @@ public class Field extends ListFragment{
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        mListener.onFragmentInteraction(v, getField(position));
+        mListener.onFragmentInteractionInField(getField(position));
     }
 
     public String getField(int fieldPosition){
@@ -142,6 +142,6 @@ public class Field extends ListFragment{
     }
 
     public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(View v, String field);
+        void onFragmentInteractionInField(String field);
     }
 }

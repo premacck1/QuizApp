@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        releaseConfig {
+            keyAlias 'QuizApp'
+            keyPassword '123456'
+            storeFile file('C:/Users/Prem $/Desktop/QuizApp_programming.jks')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion "23.0.3"
-
     defaultConfig {
         applicationId "com.prembros.programming.quizapp"
         minSdkVersion 16
@@ -22,8 +29,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile files('libs/adcolony.jar')
+    compile files('libs/applovin-sdk.jar')
+    compile files('libs/chartboost.jar')
     compile 'com.android.support:multidex:1.0.1'
     compile 'de.hdodenhof:circleimageview:1.3.0'
     compile 'com.balysv:material-ripple:1.0.2'
