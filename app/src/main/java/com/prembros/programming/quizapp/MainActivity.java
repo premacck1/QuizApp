@@ -20,8 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.applovin.sdk.AppLovinSdk;
-import com.chartboost.sdk.Chartboost;
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -32,7 +30,6 @@ import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.achievement.Achievements;
-import com.jirbo.adcolony.AdColony;
 import com.kobakei.ratethisapp.RateThisApp;
 
 import org.json.JSONException;
@@ -92,11 +89,6 @@ public class MainActivity extends LoginActivity
         if (savedInstanceState != null) {
             return;
         }
-
-        AdColony.configure(this, "version:1.11,store:google", "app37e76e4fec5f493591", "vz6039927ae3ee42ed8e");
-        Chartboost.startWithAppId(this, "57d270c943150f1f694f7316", "a5c83b4430cca0bd826a41b6e23c75c939d8efa1");
-        Chartboost.onCreate(this);
-        AppLovinSdk.initializeSdk(this);
 
         //set up & load rewarded ads
         setUpRewardedAds();

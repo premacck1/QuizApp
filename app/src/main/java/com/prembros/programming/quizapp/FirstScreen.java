@@ -7,6 +7,11 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.applovin.sdk.AppLovinSdk;
+import com.chartboost.sdk.Chartboost;
+import com.inmobi.sdk.InMobiSdk;
+import com.jirbo.adcolony.AdColony;
+
 public class FirstScreen extends AppCompatActivity {
 
     boolean startedBefore = false;
@@ -15,6 +20,13 @@ public class FirstScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_screen);
+
+//        Initialize third party ad SDKs
+        AdColony.configure(this, "version:1.11,store:google", "app37e76e4fec5f493591", "vz6039927ae3ee42ed8e");
+        Chartboost.startWithAppId(this, "57d270c943150f1f694f7316", "a5c83b4430cca0bd826a41b6e23c75c939d8efa1");
+        Chartboost.onCreate(this);
+        AppLovinSdk.initializeSdk(this);
+        InMobiSdk.init(this, "12735c59690342e4bf61cc443503807e");
 
         //  Declare a new thread to do a preference check
         final Thread t = new Thread(new Runnable() {
