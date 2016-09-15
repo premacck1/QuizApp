@@ -21,13 +21,12 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="405dp"
+            android:layout_height="wrap_content"
             android:id="@+id/listView1"
             android:scrollbars="none"
             android:divider="@android:color/transparent"
             android:dividerHeight="20dp"
             android:listSelector="#00ffffff"
-            android:layout_below="@+id/difficulty_textView"
             android:layout_gravity="center"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"

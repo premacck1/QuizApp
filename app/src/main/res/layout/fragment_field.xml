@@ -40,7 +40,6 @@
         android:listSelector="#00ffffff"
         android:scrollbars="none"
         android:layout_gravity="center"
-        android:layout_below="@+id/intro_textView"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_centerInParent="true"
