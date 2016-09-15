@@ -18,3 +18,17 @@
 -dontwarn com.immersion.**
 -dontnote com.immersion.**
 -dontwarn android.webkit.**
+-keep class com.google.android.gms.common.api.GoogleApiClient { public *; }
+-keep class com.google.android.gms.common.api.GoogleApiClient$* {public *;}
+-keep class com.google.android.gms.location.LocationServices {public *;}
+-keep class com.google.android.gms.location.FusedLocationProviderApi {public *;}
+-keep class com.google.android.gms.location.ActivityRecognition {public *;}
+-keep class com.google.android.gms.location.ActivityRecognitionApi {public *;}
+-keep class com.google.android.gms.location.ActivityRecognitionResult {public *;}
+-keep class com.google.android.gms.location.DetectedActivity {public *;}
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient{public *;}
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info{public *;}
+-keepattributes SourceFile,LineNumberTable,InnerClasses
+-keep class com.inmobi.** { *; }
+-dontwarn com.inmobi.**
+-dontwarn com.google.android.gms**
