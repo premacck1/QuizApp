@@ -9,6 +9,8 @@
     <color name="colorAccent">#424242</color>
     <color name="colorLink">#42a5f5</color>
     <color name="colorText">#616161</color>
+    <color name="page_bg">#eeeeee</color>
+    <color name="colorProgress">#b71c1c</color>
 
     <!--COLORS USED IN RESULT PIE CHART (EXPLICITLY DEFINED THERE BECAUSE USING THESE REFERENCES WASN'T WORKING-->
 <!--

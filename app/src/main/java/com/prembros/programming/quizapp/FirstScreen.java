@@ -19,7 +19,7 @@ public class FirstScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first_screen);
+//        setContentView(R.layout.activity_first_screen);
 
 //        Initialize third party ad SDKs
         AdColony.configure(this, "version:1.11,store:google", "app37e76e4fec5f493591", "vz6039927ae3ee42ed8e");
@@ -77,6 +77,6 @@ public class FirstScreen extends AppCompatActivity {
                     FirstScreen.this.finish();
                 }
             }
-        }, 1500);
+        }, 2000);
     }
 }

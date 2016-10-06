@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.applovin.sdk.AppLovinSdk;
+import com.chartboost.sdk.Chartboost;
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -30,6 +32,8 @@ import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.achievement.Achievements;
+import com.inmobi.sdk.InMobiSdk;
+import com.jirbo.adcolony.AdColony;
 import com.kobakei.ratethisapp.RateThisApp;
 
 import org.json.JSONException;
@@ -89,6 +93,13 @@ public class MainActivity extends LoginActivity
         if (savedInstanceState != null) {
             return;
         }
+
+//        Initialize third party ad SDKs
+        AdColony.configure(this, "version:1.11,store:google", "app37e76e4fec5f493591", "vz6039927ae3ee42ed8e");
+        Chartboost.startWithAppId(this, "57d270c943150f1f694f7316", "a5c83b4430cca0bd826a41b6e23c75c939d8efa1");
+        Chartboost.onCreate(this);
+        AppLovinSdk.initializeSdk(this);
+        InMobiSdk.init(this, "12735c59690342e4bf61cc443503807e");
 
         //set up & load rewarded ads
         setUpRewardedAds();
@@ -194,8 +205,54 @@ public class MainActivity extends LoginActivity
     }
 
     @Override
+    protected void onPause() {
+        if (mRewardedVideoAdiOS != null){
+            mRewardedVideoAdiOS.pause(this);
+        }
+        if (mRewardedVideoAdJava != null){
+            mRewardedVideoAdJava.pause(this);
+        }
+        if (mRewardedVideoAdHTML != null){
+            mRewardedVideoAdHTML.pause(this);
+        }
+        if (mRewardedVideoAdJS != null){
+            mRewardedVideoAdJS.pause(this);
+        }
+        super.onPause();
+    }
+
+    @Override
     protected void onResume() {
+        if (mRewardedVideoAdiOS != null){
+            mRewardedVideoAdiOS.resume(this);
+        }
+        if (mRewardedVideoAdJava != null){
+            mRewardedVideoAdJava.resume(this);
+        }
+        if (mRewardedVideoAdHTML != null){
+            mRewardedVideoAdHTML.resume(this);
+        }
+        if (mRewardedVideoAdJS != null){
+            mRewardedVideoAdJS.resume(this);
+        }
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mRewardedVideoAdiOS != null){
+            mRewardedVideoAdiOS.destroy(this);
+        }
+        if (mRewardedVideoAdJava != null){
+            mRewardedVideoAdJava.destroy(this);
+        }
+        if (mRewardedVideoAdHTML != null){
+            mRewardedVideoAdHTML.destroy(this);
+        }
+        if (mRewardedVideoAdJS != null){
+            mRewardedVideoAdJS.destroy(this);
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -690,6 +747,7 @@ public class MainActivity extends LoginActivity
     public void loadRewardedVideoAds(){
         synchronized (new Object()){
             Bundle extras = new Bundle();
+
             extras.putBoolean("_noRefresh", true);
             AdRequest adRequest = new AdRequest.Builder()
                     .addNetworkExtrasBundle(AdMobAdapter.class, extras)

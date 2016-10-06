@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foregroundGravity="center"
-    app:mrl_rippleColor="@color/colorPrimaryDarker"
+    app:mrl_rippleColor="@color/colorPrimary"
+    app:mrl_rippleAlpha="0.15"
     app:mrl_rippleOverlay="true"
     app:mrl_rippleHover="true"
-    app:mrl_rippleRoundedCorners="2dp">
+    app:mrl_rippleRoundedCorners="4dp">
 
     <com.prembros.programming.quizapp.CustomTextViewSemiLight
         android:id="@+id/choice_button"

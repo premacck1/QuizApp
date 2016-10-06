@@ -681,7 +681,7 @@ public class Questions extends Fragment implements OnClickListener, OnLongClickL
 
     @Override
     public void onAttach(Context context) {
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         super.onAttach(context);
         setHasOptionsMenu(true);
         if (context instanceof OnFragmentInteractionListener) {

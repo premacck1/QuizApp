@@ -4,23 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="@color/page_bg"
     tools:context=".Questions">
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
-        android:progressDrawable="@drawable/progress_bar_states"
+        android:progressDrawable="@drawable/progress_bar_question"
         android:id="@+id/question_progressBar"
         android:layout_width="match_parent"
-        android:layout_height="6dp"
+        android:layout_height="5dp"
         android:interpolator="@android:anim/accelerate_decelerate_interpolator"
         android:layout_alignParentTop="true"/>
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
-        android:progressDrawable="@drawable/progress_bar_states"
+        android:progressDrawable="@drawable/progress_bar_time"
         android:id="@+id/time_progressBar"
         android:layout_width="match_parent"
-        android:layout_height="6dp"
+        android:layout_height="5dp"
         android:layout_below="@+id/question_progressBar"
         android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
 

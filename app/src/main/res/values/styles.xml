@@ -10,6 +10,8 @@
     </style>
 
     <style name="FirstScreenTheme" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowAnimationStyle">@style/MainActivityTransition</item>
     </style>
 
